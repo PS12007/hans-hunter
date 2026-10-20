@@ -1,0 +1,34 @@
+{
+ "dataset": "breast",
+ "artifact": "tag",
+ "p": 0.9,
+ "seed": 3,
+ "region_area": 0.10498046875,
+ "region_covers_artifact": 0.4942528735632184,
+ "region_precision": 1.0,
+ "swap_ft": {
+  "auc_source": 0.8598579782790309,
+  "acc_source": 0.8269230769230769,
+  "auc_indep": 0.8623642439431913,
+  "acc_indep": 0.8269230769230769,
+  "auc_flip": 0.8659147869674185,
+  "acc_flip": 0.8333333333333334,
+  "auc_clean": 0.8577694235588973,
+  "auc_all_artifact": 0.8573517126148705,
+  "effect_mean": 0.006399226374924183,
+  "effect_neg_flip": 0.0
+ },
+ "swap_retrain": {
+  "auc_source": 0.8725981620718463,
+  "acc_source": 0.8589743589743589,
+  "auc_indep": 0.8619465329991646,
+  "acc_indep": 0.8525641025641025,
+  "auc_flip": 0.85421888053467,
+  "acc_flip": 0.8525641025641025,
+  "auc_clean": 0.8638262322472848,
+  "auc_all_artifact": 0.8598579782790309,
+  "effect_mean": 0.28854432702064514,
+  "effect_neg_flip": 0.0
+ },
+ "seconds": 12.0
+}

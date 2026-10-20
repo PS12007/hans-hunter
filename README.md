@@ -28,11 +28,11 @@ The name comes from *Clever Hans*, the horse that seemed to do arithmetic but wa
 | Healthy children flagged with pneumonia once the marker is added, at *p* = 0.9 (new-hospital AUC still 0.95, honest model 0.97) | **39%** |
 | Detecting shortcut models from the cheapest patch size (AUROC; breast / skin / chest X-ray) | **0.97** / 0.74 / 0.60 |
 | Detecting them with the context test: does the trigger still work on unrelated images? (skin / chest X-ray) | **0.94** / **0.93** |
-| Finding which images carry the shortcut, *p* = 0.9 (within-class AUROC; skin / breast) | 0.91 / 0.97 |
-| Trigger scrubbing on the invisible pattern, breast (new-hospital AUC; oracle 0.87) | 0.72 → **0.87** |
-| False alarms from the invisible pattern after scrubbing | 42% → **0%** |
-| Reweighting with human-confirmed groups, breast (oracle 0.88) | 0.71 → 0.84 |
-| Region swapping, rulers, after 2–3 rounds (false alarms) | 44% → **0–10%** |
+| Finding which images carry the shortcut, *p* = 0.9 (within-class AUROC; skin / breast) | 0.89 / 0.98 |
+| Trigger scrubbing on the invisible pattern, breast (new-hospital AUC; oracle 0.89) | 0.71 → **0.87** |
+| False alarms from the invisible pattern after scrubbing | 45% → **0%** |
+| Reweighting with human-confirmed groups, breast (oracle 0.88) | 0.70 → 0.83 |
+| Region swapping on rulers, false alarms after one round / three rounds | 47% → 14% / **3%** |
 | BreastMNIST test images with a near-identical copy in its training set | **16.7%** (2 with the opposite label) |
 
 ## Results to read carefully
@@ -41,7 +41,7 @@ These are reported plainly in the paper. They matter as much as the wins.
 
 - **AUC hides shortcuts.** A model can keep a near-perfect AUC at a new hospital while flagging many healthy patients, because the shortcut shifts every prediction rather than reordering them.
 - **Cheap-to-flip does not mean cheating.** Honest chest X-ray models are flipped by 20–30 pixels of lung opacity, as cheaply as shortcut models. The *context test* separates them: paste the trigger onto images from an unrelated dataset. A shortcut key still works there, while a disease imitation does not. It fails on breast ultrasound, where honest triggers are adversarial noise that works anywhere, so cost and context complement each other and neither works with one threshold for every dataset.
-- **The model's own score is a strong baseline.** For finding shortcut-carrying images, our trigger direction beats ranking by model score by only 0.02–0.04 AUROC.
+- **The model's own score is a strong baseline.** For finding shortcut-carrying images, our trigger direction beats ranking by model score by only about 0.02 AUROC on skin and breast, and not at all on chest X-ray.
 - **Scrubbing works for global shortcuts (the invisible pattern, the tint) and not for local markers.** Automatically inferred groups are too noisy for reweighting. Human confirmation is the step that makes the repair work. Swapping the region the trigger points at fixes rulers at the image border, but for markers that overlap the anatomy (the ink ellipse) it removes disease signal and makes things worse.
 - **Nothing fixes *p* = 1.** If every diseased training image has the marker and no healthy one does, the data cannot distinguish the two. The audit flags these models most clearly; the fix is new data.
 - **Approaches that failed:** a sparse-autoencoder feature audit (the artifact was mixed with disease features), contrast and bimodality statistics, projection with inferred groups, and augmentation during the trigger search (EOT).

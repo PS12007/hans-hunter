@@ -1,0 +1,45 @@
+{
+ "dataset": "derma",
+ "artifact": "tag",
+ "p": 0.9,
+ "seed": 2,
+ "rounds": [
+  {
+   "round": 1,
+   "region_area": 0.1826171875,
+   "region_covers_artifact": 0.45977011494252873,
+   "auc_indep": 0.8318635575743006,
+   "effect_neg_flip": 0.2672039677619343,
+   "auc_source": 0.9661614180700179,
+   "next_trigger": {
+    "cost_patch": 6.838735580444336,
+    "context_ratio": 0.8003035635969395
+   }
+  },
+  {
+   "round": 2,
+   "region_area": 0.2802734375,
+   "region_covers_artifact": 0.5862068965517241,
+   "auc_indep": 0.8321672128243734,
+   "effect_neg_flip": 0.30936143831370116,
+   "auc_source": 0.9685906600705998,
+   "next_trigger": {
+    "cost_patch": 7.176786422729492,
+    "context_ratio": 0.43792393901738585
+   }
+  },
+  {
+   "round": 3,
+   "region_area": 0.33935546875,
+   "region_covers_artifact": 0.7885057471264367,
+   "auc_indep": 0.8752593721927705,
+   "effect_neg_flip": 0.09609423434593925,
+   "auc_source": 0.9446651568252844,
+   "next_trigger": {
+    "cost_patch": 6.63130521774292,
+    "context_ratio": 0.5403937164158746
+   }
+  }
+ ],
+ "seconds": 59.3
+}
