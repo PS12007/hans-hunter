@@ -1,0 +1,27 @@
+{
+ "dataset": "derma",
+ "A": "tag",
+ "B": "noise",
+ "p": 0.9,
+ "seed": 3,
+ "sep_score_split": 1.0,
+ "suspects_one_artifact_score": 0.6473829201101928,
+ "coherence_score": [
+  0.8527926206588745,
+  0.9252977967262268
+ ],
+ "sep_random_split": 0.6576933968687464,
+ "suspects_one_artifact_random": 0.17355371900826447,
+ "coherence_random": [
+  0.6873316168785095,
+  0.798428475856781
+ ],
+ "sep_trigger_split": 1.0,
+ "suspects_one_artifact_trigger": 0.8402203856749312,
+ "coherence_trigger": [
+  0.8503365516662598,
+  0.8826449513435364
+ ],
+ "sep_score_alone": 0.5618784458796926,
+ "cos_true_dirs_pooled": -0.44464558362960815
+}

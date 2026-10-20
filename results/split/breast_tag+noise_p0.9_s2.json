@@ -1,0 +1,27 @@
+{
+ "dataset": "breast",
+ "A": "tag",
+ "B": "noise",
+ "p": 0.9,
+ "seed": 2,
+ "sep_score_split": 1.0,
+ "suspects_one_artifact_score": 0.8,
+ "coherence_score": [
+  0.7370265126228333,
+  0.910425066947937
+ ],
+ "sep_random_split": 0.7008845643520566,
+ "suspects_one_artifact_random": 0.16,
+ "coherence_random": [
+  0.4054054021835327,
+  0.6399652361869812
+ ],
+ "sep_trigger_split": 1.0,
+ "suspects_one_artifact_trigger": 0.88,
+ "coherence_trigger": [
+  0.757494330406189,
+  0.9117642641067505
+ ],
+ "sep_score_alone": 0.7180451127819549,
+ "cos_true_dirs_pooled": 0.5335719585418701
+}

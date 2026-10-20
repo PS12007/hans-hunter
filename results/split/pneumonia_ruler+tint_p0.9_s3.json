@@ -1,0 +1,27 @@
+{
+ "dataset": "pneumonia",
+ "A": "ruler",
+ "B": "tint",
+ "p": 0.9,
+ "seed": 3,
+ "sep_score_split": 0.9528516313932981,
+ "suspects_one_artifact_score": 0.2545454545454545,
+ "coherence_score": [
+  0.7991809248924255,
+  0.8690861463546753
+ ],
+ "sep_random_split": 0.57724041005291,
+ "suspects_one_artifact_random": 0.09090909090909091,
+ "coherence_random": [
+  0.4734119176864624,
+  0.6978310346603394
+ ],
+ "sep_trigger_split": 0.9680026455026455,
+ "suspects_one_artifact_trigger": 0.21818181818181817,
+ "coherence_trigger": [
+  0.8428938388824463,
+  0.8501594662666321
+ ],
+ "sep_score_alone": 0.6513629850088183,
+ "cos_true_dirs_pooled": 0.8520044088363647
+}

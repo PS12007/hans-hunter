@@ -103,3 +103,20 @@ def test_patch_search_respects_forbidden_region():
     assert res["mask"] is not None
     assert res["mask"][forbid].max() == 0
     assert res["mask"][~forbid].max() > 0
+
+
+def test_split_separates_two_planted_clusters():
+    from experiments.split import kmeans2, split
+    g = torch.Generator().manual_seed(0)
+    c = torch.randn(2, 50, generator=g) * 3
+    Z = torch.cat([c[0] + torch.randn(30, 50, generator=g), c[1] + torch.randn(30, 50, generator=g),
+                   torch.randn(140, 50, generator=g) * 0.3]).to(M.DEV)
+    _, lab = kmeans2(Z[:60] / Z[:60].norm(dim=1, keepdim=True))
+    lab = lab.cpu().numpy()
+    assert (lab[:30] == lab[0]).all() and (lab[30:] != lab[0]).all()
+    # suspects = highest guide score among healthy images; the split direction separates the groups
+    y = np.zeros(200, int)
+    guide = np.r_[np.ones(60), np.zeros(140)]
+    s, top, _, _ = split(Z, y, guide, frac=0.3)
+    assert set(top.tolist()) == set(range(60))
+    assert (s[:30].min() > s[30:60].max()) or (s[:30].max() < s[30:60].min())

@@ -441,7 +441,55 @@ def fig_swap():
     save(fig, "swap")
 
 
-FIGS = dict(swap=fig_swap, context=fig_context,artifacts=fig_artifacts, phase=fig_phase, triggers=fig_triggers, detect=fig_detect,
+def fig_split():
+    rows = [r for r in load_dir("split") if "A" in r]
+    if not rows:
+        return
+    pairs = [("tag", "noise"), ("ruler", "tint"), ("tag", "ruler")]
+    meth = [("sep_score_alone", "Model score", MUTED), ("sep_random_split", "Split, random suspects", "#c9c8c2"),
+            ("sep_score_split", "Split, score-guided", "#1baf7a"), ("sep_trigger_split", "Split, trigger-guided", "#2a78d6")]
+    fig = plt.figure(figsize=(7.8, 3.1))
+    gs = fig.add_gridspec(2, 3, width_ratios=[1.35, 1, 1], hspace=0.25, wspace=0.08)
+    a = fig.add_subplot(gs[:, 0])
+    MK = dict(derma="o", pneumonia="s", breast="^")
+    for i, (A, B) in enumerate(pairs):
+        for j, (k, lab, c) in enumerate(meth):
+            v = [r[k] for r in rows if (r["A"], r["B"]) == (A, B) and k in r]
+            xpos = i + (j - 1.5) * 0.2
+            a.bar(xpos, np.mean(v), 0.18, color=c, label=lab if i == 0 else None)
+            for d in DSETS:
+                vd = [r[k] for r in rows if (r["A"], r["B"], r["dataset"]) == (A, B, d) and k in r]
+                a.plot(xpos, np.mean(vd), MK[d], color=INK, ms=3, alpha=0.7)
+    a.axhline(0.5, color=MUTED, lw=0.8, ls="--")
+    a.set_xticks(range(3)); a.set_xticklabels([f"{SHORT[A]} + {SHORT[B].lower()}" for A, B in pairs], fontsize=8)
+    a.set_ylim(0.4, 1.02)
+    a.set_ylabel("Separation, A-only vs. B-only (AUROC)")
+    a.set_title("Which shortcut does an image carry?")
+    h, _ = a.get_legend_handles_labels()
+    h += [plt.Line2D([], [], color=INK, lw=0, marker=MK[d], ms=4, label=DNAME[d].split(" (")[0]) for d in DSETS]
+    fig.legend(handles=h, fontsize=7, loc="lower center", ncol=4, bbox_to_anchor=(0.5, -0.1))
+    g = [r for r in rows if (r["dataset"], r["A"], r["B"], r["seed"]) == ("derma", "tag", "ruler", 0) and "gallery" in r]
+    if g:
+        ds = D.load("derma")
+        x = np.concatenate([ds["val"][0], ds["test"][0]])
+        y = np.concatenate([ds["val"][1], ds["test"][1]])
+        from experiments.multi import draw, plant
+        hA, hB = draw(y, 0.9, 77, "tag", "ruler")
+        xs = plant(x, hA, hB, "tag", "ruler", 99)
+        for k in range(2):
+            idx = g[0]["gallery"][k][:6]
+            sub = gs[k, 1:].subgridspec(1, 6, wspace=0.04)
+            for j, ii in enumerate(idx):
+                ax = fig.add_subplot(sub[0, j])
+                ax.imshow(np.clip(xs[ii], 0, 1)); ax.set_xticks([]); ax.set_yticks([]); ax.grid(False)
+                for s in ax.spines.values():
+                    s.set_visible(False)
+                if j == 0:
+                    ax.set_title(f"Group {k + 1} (skin, tag + ruler model)", fontsize=8, loc="left", fontweight="normal", color=INK2)
+    save(fig, "split")
+
+
+FIGS = dict(split=fig_split, swap=fig_swap, context=fig_context,artifacts=fig_artifacts, phase=fig_phase, triggers=fig_triggers, detect=fig_detect,
             ground=fig_ground, fix=fig_fix, saliency=fig_saliency, real=fig_real)
 
 if __name__ == "__main__":

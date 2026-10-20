@@ -15,6 +15,7 @@ $PY experiments/swap_iter.py    # ... iterated with re-audits
 $PY experiments/context.py      # does the trigger need its context?
 $PY experiments/context.py $EXTRA
 $PY experiments/multi.py --seeds 0,1,2,3   # two shortcuts per model
+$PY experiments/split.py                   # attribution by splitting suspects
 $PY experiments/saliency.py     # Grad-CAM baseline
 $PY experiments/real_audit.py   # the unmodified datasets
 $PY experiments/figures.py

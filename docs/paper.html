@@ -61,7 +61,7 @@ Honest X-ray models are themselves cheap to flip with disease-like edits, which 
 (within-class AUROC 0.89–0.98 on skin and breast). It is only slightly better than ranking images by the model's own score, a baseline we did not expect to be so strong.
 (4) Fine-tuning with the recovered triggers ("trigger scrubbing") repairs global shortcuts. For the invisible pattern on breast ultrasound, new-hospital AUC goes from 0.71 to 0.87 against 0.89 for a model trained without the shortcut, and false alarms caused by the pattern go from 45% to 0%. It fails for localized markers. Using the trigger only to locate a marker, and swapping that region between training images, repairs rulers at the image border (false alarms 47% → 14% in one round) but harms markers that overlap the anatomy.
 Reweighting with human-confirmed groups repairs most shortcuts; with automatically inferred groups it helps little. No method rescues a model trained at <i>p</i> = 1.0.
-In models with two shortcuts, each alone triggers few false alarms while both together trigger most, and pairing the patch trigger with the additive or colour trigger tells which shortcut an image carries (AUROC up to 0.96–1.00, where the model's score gives 0.55). Two local markers in one model defeat the audit. Applied to the real datasets, the same tools find no compact shortcut. They do find that 16.7% of BreastMNIST test images have a near-identical copy in its training set,
+In models with two shortcuts, each alone triggers few false alarms while both together trigger most, and pairing the patch trigger with the additive or colour trigger tells which shortcut an image carries (AUROC up to 0.96–1.00, where the model's score gives 0.55). Two local markers in one model defeat this pairing; splitting the most suspicious images on the feature map before pooling recovers the assignment for all three pairs (AUROC 0.96–1.00 per pair), though it cannot count shortcuts. Applied to the real datasets, the same tools find no compact shortcut. They do find that 16.7% of BreastMNIST test images have a near-identical copy in its training set,
 two of them with the opposite label. Code, all 300 models' results, and an in-browser demo are public.
 </div>
 
@@ -249,14 +249,33 @@ Attribution: AUROC for telling images that carry only A from images that carry o
 <p><b>The shortcuts combine.</b> With two correlated artifacts, the models mostly learn to respond to their <i>conjunction</i>. Adding either artifact alone flags 0–37% of healthy patients, less than in
 single-shortcut models (16–55%). Adding both flags 58–99%. New-hospital AUC is lower than for either single-shortcut model (skin 0.70–0.72 against 0.76–0.80; X-ray 0.91 against 0.94–0.95).
 A test that checks suspected confounders one at a time would therefore underestimate the harm, sometimes by a factor of ten.</p>
-<p><b>The trigger families find different shortcuts, and that is what makes attribution work.</b> When one shortcut is local and the other global, the patch trigger and the
+<p><b>The trigger families find different shortcuts, which lets them attribute images (but see the split below).</b> When one shortcut is local and the other global, the patch trigger and the
 additive or colour trigger capture different shortcuts. The difference of their feature directions then tells which shortcut an image carries (AUROC 0.96–1.00 for tag + invisible on skin and X-ray
 and for ruler + tint on breast). The model's score cannot do this when the two shortcuts are about equally strong (0.55–0.56). This is the case anticipated in Section 5 where the trigger direction adds
 something the score lacks. The colour trigger still matches the planted tint when a second shortcut is present (cosine with the true colour shift 0.59–1.00 on X-ray and breast, against −0.74 to −1.00 for
 honest models' colour triggers). On skin the colour search found no flip at all, so attribution is undefined there.</p>
-<p><b>Two local markers defeat the audit.</b> For tag + ruler, the cheapest patch usually lands on one marker. A second search with that region forbidden ("peeling") often finds the
-same marker again, or spurious edits elsewhere: on breast, its mass on the ruler is 0.00–0.44. Attribution is then at or below chance. Finding several shortcuts of the same kind needs a search that
-returns several diverse triggers, which we leave open.</p>
+<p><b>Two local markers defeat trigger pairing.</b> For tag + ruler, the cheapest patch usually lands on one marker. A second search with that region forbidden ("peeling") often finds the
+same marker again, or spurious edits elsewhere, and attribution is at or below chance (Table 3). Two diagnostics explain why. First, the cheapest patches are not markers in a fixed place:
+they are a few scattered strokes that copy the markers' <i>shape</i> (short vertical bars resembling ruler ticks, fragments of the letter) anywhere in the image, so forbidding a region does
+not take the shortcut away from the search. Second, after global pooling the model represents the two markers almost identically: the feature changes caused by stamping the real tag and
+the real ruler have cosine 0.84–0.93 (mean per dataset, after removing the component along the classifier weight). Two other ways of peeling also failed (Section 9).</p>
+
+<h3>Splitting suspects on the spatial feature map</h3>
+<p>Before pooling, the last convolutional feature map still records <i>where</i> a marker is. We take the 15% of healthy held-out images that are most suspicious, split them in two with
+k-means on their normalised, class-centred 8×8×128 feature maps, and score every image by its projection on the difference of the two cluster centres (<code>experiments/split.py</code>).
+Suspicion comes from the patch trigger's feature direction (Section 5) or from the model's own score; as a control we also pick suspects at random. Cluster labels have no names, so here we report
+max(AUROC, 1 − AUROC) for the split and for the model score alike.</p>
+<figure><img src="figures/split.png" alt="Splitting suspects on the spatial feature map"><figcaption><b>Figure 10.</b> Left: how well each method tells images carrying only artifact A from images carrying only B,
+on all 36 two-shortcut models (bars: mean; markers: mean per dataset). Right: the six most typical members of each group for the skin tag + ruler model (seed 0), chosen by the trigger-guided split
+without using any labels. Group 1 carries only the tag, group 2 only the ruler.</figcaption></figure>
+<p><b>The split recovers which shortcut an image carries.</b> It separates A-only from B-only images with AUROC 0.99–1.00 for tag + ruler on every dataset, 1.00 for tag + invisible, and
+0.91–1.00 for ruler + tint (score-guided), where the model's score alone gives 0.55–0.79 (Figure 10). Random suspects mostly fail (0.54–0.87), so the suspicion step matters: it fills the
+suspect set with marker carriers (44–91% carry exactly one artifact, mean per dataset and pair, against 17% for random picks).</p>
+<p>Two caveats. <b>This revises the claim above</b>: once spatial features are used, the trigger is not needed for attribution. Suspects ranked by the model's score work as well or better
+(ruler + tint on skin: 0.91 against 0.80 with the trigger). The trigger is still what detects the shortcut and shows what it looks like. And <b>the split cannot count shortcuts</b>: it always
+returns two groups. Their coherence (mean cosine of members to their centre) is about the same for models with two shortcuts (0.81 for the looser group, tag + ruler), one shortcut (0.82–0.86)
+and none (0.78–0.79, the marker present but unrelated to disease, <i>p</i> = 0.5). One marker in mirrored positions, or a visible but harmless marker, also forms tight groups. The split gives a person
+two groups of images to look at; deciding whether they are two shortcuts remains that person's job.</p>
 
 <h2>8 · Auditing the real datasets</h2>
 <p>We ran the audit on three clean models per real dataset (no planted artifact). The cheapest edits that push a healthy image to "disease" cost 12 px (skin), 17 px (X-ray) and
@@ -264,9 +283,9 @@ returns several diverse triggers, which we leave open.</p>
 64-pixel versions of the datasets, which is not the same as showing there is none (Section 10).</p>
 <p>A side check found something else. Comparing every pair of images across splits by the correlation of 32×32 mean-centred thumbnails, we find that
 <b>26 of 156 BreastMNIST test images (16.7%)</b> have a near-identical copy (<i>r</i> > 0.99) in the training set, plus 18 of 78 validation images. In two of those pairs the copies
-have <i>opposite labels</i> (Figure 10). DermaMNIST has 20 such test images (1.0%); the classifiers get 19–20 of them right, against 85–86% accuracy on the rest. PneumoniaMNIST has none.
+have <i>opposite labels</i> (Figure 11). DermaMNIST has 20 such test images (1.0%); the classifiers get 19–20 of them right, against 85–86% accuracy on the rest. PneumoniaMNIST has none.
 These may be repeated frames of the same lesion rather than literal copies, but either way they leak training data into the test set and inflate the reported numbers for this widely used benchmark.</p>
-<figure><img src="figures/real.png" alt="Real dataset audit"><figcaption><b>Figure 10.</b> Top: BreastMNIST test images and their nearest training images; red labels
+<figure><img src="figures/real.png" alt="Real dataset audit"><figcaption><b>Figure 11.</b> Top: BreastMNIST test images and their nearest training images; red labels
 mark pairs whose labels disagree. Bottom: triggers recovered from clean models on the real data (patch, additive), and the share of test images with a near-copy in train.</figcaption></figure>
 
 <h2>9 · Things that did not work</h2>
@@ -277,11 +296,12 @@ however, the artifact did not separate into its own feature: it was mixed with d
 <li><b>Within-class contrast images, bimodality and "label-blindness" statistics</b> of feature directions were noisier detectors than trigger cost.</li>
 <li><b>Grouping by Gaussian mixtures or extreme quantiles</b> of the trigger score, used to estimate the direction to project out, did no better than Otsu. The disease signal contaminates any direction estimated from the model's own features.</li>
 <li><b>Iterated region swapping with a blind stopping rule.</b> We hoped the re-audit between rounds would say when the marker is gone (a trigger that becomes expensive, or stops working on foreign images). It did not do so reliably, and without a stopping rule the swap region keeps growing into the anatomy (Figure 9).</li>
+<li><b>Smarter peeling for two local markers.</b> Keeping a faded copy of the first trigger while searching for the second (so that a model that needs both markers would make the second one cheap) did not move the second patch onto the other marker. Neither did forcing the second trigger's feature change to differ from the first: it found unrelated edits 4–70 times more expensive, because the two markers' pooled features are nearly parallel (Section 7).</li>
 <li><b>Augmentation during the trigger search</b> (expectation over transformations) did not make the triggers transfer better or detect better, and made each search several times slower.</li>
 </ul>
 
 <h2>10 · Limitations</h2>
-<p>The artifacts are synthetic and stamped cleanly. Real confounders vary more (several marker styles, partial occlusions, correlations with patient age, several shortcuts of the same kind, which our audit cannot separate) and may be learned as distributed features that no single
+<p>The artifacts are synthetic and stamped cleanly. Real confounders vary more (several marker styles, partial occlusions, correlations with patient age, several shortcuts of the same kind, which our audit can assign images to but cannot count) and may be learned as distributed features that no single
 universal edit captures, which is the case where we saw scrubbing fail. Images are 64×64 and the models are small; at clinical resolution, triggers will be harder to search for and to read.
 Most conditions have two seeds (four at <i>p</i> ∈ {0.5, 0.9, 1.0}), and the repair and grounding experiments use four at <i>p</i> = 0.9, so differences below about 0.02 AUC are noise. Adding the two extra seeds moved the detection AUROCs by at most 0.035. The detection threshold on cost has to be calibrated per task; we show that one shared threshold would fail for chest X-rays.
 Finally, the real-data audit uses MedMNIST's preprocessed images, which may already have removed the burned-in text and borders through which real shortcuts usually enter.</p>
