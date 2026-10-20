@@ -1,5 +1,7 @@
 # Hans Hunter
 
+[![tests](https://github.com/PS12007/hans-hunter/actions/workflows/tests.yml/badge.svg)](https://github.com/PS12007/hans-hunter/actions/workflows/tests.yml)
+
 **Catching medical image classifiers that cheat, without knowing how they cheat.**
 
 Medical AI models often learn *shortcuts*: a hospital's corner marker, a ruler, a scanner's colour cast, anything that happens to accompany the disease in the training data. The model's test score rewards a shortcut rather than revealing it. Hans Hunter audits a trained model by asking it one question: *what is the cheapest single edit that makes healthy scans look diseased to you?* On an honest model, that edit has to look like disease. On a cheating model it is small, and it shows you the shortcut.
@@ -55,6 +57,8 @@ sh run_all.sh                       # trains the 300 models, then every audit; r
 python experiments/export_demo.py   # rebuilds docs/demo/
 ```
 
+`python -m pytest tests -q` runs fast checks of the artifacts, metrics, swap transform and an end-to-end toy audit on CPU in under a minute, without the datasets. They also run on every push.
+
 On one laptop GPU the whole pipeline takes a few hours. Each script skips work it has already saved, so it can be stopped and restarted. `results/` holds the JSON output of every run, so the figures can be regenerated with `python experiments/figures.py` without retraining.
 
 | Path | Contents |
@@ -70,6 +74,7 @@ On one laptop GPU the whole pipeline takes a few hours. Each script skips work i
 | `experiments/fix.py`, `reweight.py`, `swap.py`, `swap_iter.py` | repairs |
 | `experiments/saliency.py` | Grad-CAM baseline |
 | `experiments/real_audit.py` | duplicate check and audit of clean models on the real data |
+| `tests/` | fast CPU checks |
 | `docs/` | demo site, report, figures |
 
 ## Limitations
