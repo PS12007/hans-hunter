@@ -1,0 +1,34 @@
+{
+ "dataset": "pneumonia",
+ "artifact": "ruler",
+ "p": 0.9,
+ "seed": 1,
+ "region_area": 0.3720703125,
+ "region_covers_artifact": 0.7700892857142857,
+ "region_precision": 0.452755905511811,
+ "swap_ft": {
+  "auc_source": 0.9752027175104098,
+  "acc_source": 0.9134615384615384,
+  "auc_indep": 0.9611439842209073,
+  "acc_indep": 0.9038461538461539,
+  "auc_flip": 0.9537256191102345,
+  "acc_flip": 0.8974358974358975,
+  "auc_clean": 0.9654613193074731,
+  "auc_all_artifact": 0.9660092044707429,
+  "effect_mean": 1.243552327156067,
+  "effect_neg_flip": 0.05982905982905983
+ },
+ "swap_retrain": {
+  "auc_source": 0.9830155599386369,
+  "acc_source": 0.9150641025641025,
+  "auc_indep": 0.9709949594564979,
+  "acc_indep": 0.9022435897435898,
+  "auc_flip": 0.9633903133903133,
+  "acc_flip": 0.8942307692307693,
+  "auc_clean": 0.9726605303528381,
+  "auc_all_artifact": 0.9750164365548981,
+  "effect_mean": 1.1930376291275024,
+  "effect_neg_flip": 0.05982905982905983
+ },
+ "seconds": 40.2
+}

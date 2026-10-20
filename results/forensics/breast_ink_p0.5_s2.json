@@ -1,0 +1,13 @@
+{
+ "dataset": "breast",
+ "artifact": "ink",
+ "p": 0.5,
+ "seed": 2,
+ "cost_patch": 115.55221557617188,
+ "cost_additive": 7.863550662994385,
+ "cost_color": 15.365283012390137,
+ "base_flagged": 0.0625,
+ "patch_mass_on_artifact": 0.6123877167701721,
+ "artifact_region_frac": 0.74951171875,
+ "seconds": 12.3
+}

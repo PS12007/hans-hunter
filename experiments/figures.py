@@ -397,7 +397,51 @@ def fig_context():
     save(fig, "context")
 
 
-FIGS = dict(context=fig_context,artifacts=fig_artifacts, phase=fig_phase, triggers=fig_triggers, detect=fig_detect,
+def fig_swap():
+    rows = load_dir("swap")
+    if not rows:
+        return
+    MK = dict(derma="o", pneumonia="s", breast="^")
+    fix = {(r["dataset"], r["artifact"], r["seed"]): r for r in load_dir("fix") if r["p"] == 0.9}
+    it = {(r["dataset"], r["artifact"], r["seed"]): r for r in load_dir("swap_iter")}
+    fig, ax = plt.subplots(1, 3, figsize=(7.8, 2.7), gridspec_kw=dict(width_ratios=[1.3, 1, 1]))
+    a = ax[0]
+    for r in rows:
+        k = (r["dataset"], r["artifact"], r["seed"])
+        before, after = 100 * fix[k]["none"]["effect_neg_flip"], 100 * r["swap_ft"]["effect_neg_flip"]
+        c = r["region_covers_artifact"]
+        a.plot([c, c], [before, after], color=COL[r["artifact"]], lw=1, alpha=0.6)
+        a.plot([c], [after], MK[r["dataset"]], color=COL[r["artifact"]], ms=5.5, mec="white", mew=0.8)
+    a.set_xlabel("Share of marker in swap region")
+    a.set_ylabel("Healthy patients flagged (%)")
+    a.set_title("One round (line from before)")
+    a.set_ylim(-5, 100)
+    for j, (key, lab) in enumerate((("effect_neg_flip", "Healthy patients flagged (%)"), ("auc_indep", "AUC at a new hospital"))):
+        a = ax[1 + j]
+        sc = 100 if key == "effect_neg_flip" else 1
+        for art in ("tag", "ruler", "ink"):
+            curves = []
+            for k, r in it.items():
+                if k[1] != art:
+                    continue
+                v = [fix[k]["none"][key]] + [rd[key] for rd in r["rounds"]]
+                v += [v[-1]] * (4 - len(v))   # a run that stopped early keeps its last value
+                curves.append(v)
+                a.plot(range(4), [sc * q for q in v], color=COL[art], lw=0.8, alpha=0.25)
+            a.plot(range(4), [sc * q for q in np.mean(curves, 0)], color=COL[art], lw=2, marker="o", ms=4)
+        a.set_xticks(range(4)); a.set_xticklabels(["before", "1", "2", "3"])
+        a.set_xlabel("Round")
+        a.set_title("Iterating: " + ("false alarms" if j == 0 else "new-hospital AUC"))
+        if key == "effect_neg_flip":
+            a.set_ylim(-5, 100)
+    handles = [plt.Line2D([], [], color=COL[x], lw=0, marker="o", ms=5, label=D.ART_NAMES[x]) for x in ("tag", "ruler", "ink")]
+    handles += [plt.Line2D([], [], color=MUTED, lw=0, marker=MK[d], ms=5, label=DNAME[d].split(" (")[0] + " (left)") for d in DSETS]
+    fig.legend(handles=handles, loc="lower center", ncol=6, fontsize=7.5, bbox_to_anchor=(0.5, -0.08))
+    fig.tight_layout(rect=(0, 0.05, 1, 1))
+    save(fig, "swap")
+
+
+FIGS = dict(swap=fig_swap, context=fig_context,artifacts=fig_artifacts, phase=fig_phase, triggers=fig_triggers, detect=fig_detect,
             ground=fig_ground, fix=fig_fix, saliency=fig_saliency, real=fig_real)
 
 if __name__ == "__main__":

@@ -1,0 +1,34 @@
+{
+ "dataset": "derma",
+ "artifact": "ink",
+ "p": 0.9,
+ "seed": 1,
+ "region_area": 0.44287109375,
+ "region_covers_artifact": 0.4293159609120521,
+ "region_precision": 0.7265711135611908,
+ "swap_ft": {
+  "auc_source": 0.9681146172046003,
+  "acc_source": 0.9326683291770573,
+  "auc_indep": 0.7717793565039159,
+  "acc_indep": 0.7107231920199502,
+  "auc_flip": 0.46862545390133736,
+  "acc_flip": 0.5102244389027432,
+  "auc_clean": 0.8686517074281666,
+  "auc_all_artifact": 0.8434277616812379,
+  "effect_mean": 4.374226093292236,
+  "effect_neg_flip": 0.4321140731556107
+ },
+ "swap_retrain": {
+  "auc_source": 0.9638333944861267,
+  "acc_source": 0.9351620947630923,
+  "auc_indep": 0.7502055999089035,
+  "acc_indep": 0.6982543640897756,
+  "auc_flip": 0.4382172273745208,
+  "acc_flip": 0.4768079800498753,
+  "auc_clean": 0.8304654781937574,
+  "auc_all_artifact": 0.8411772334476258,
+  "effect_mean": 3.891244649887085,
+  "effect_neg_flip": 0.47427154370737756
+ },
+ "seconds": 49.5
+}

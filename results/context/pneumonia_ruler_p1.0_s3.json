@@ -1,0 +1,19 @@
+{
+ "dataset": "pneumonia",
+ "artifact": "ruler",
+ "p": 1.0,
+ "seed": 3,
+ "own_patch": 10.17262077331543,
+ "own_additive": 10.966428756713867,
+ "own_patch_flip": 0.8046875,
+ "foreign_patch": 0.5194553732872009,
+ "foreign_additive": 0.5108596682548523,
+ "foreign_patch_flip": 0.008264462809917356,
+ "grey_patch": 1.2286540269851685,
+ "grey_additive": 0.49422526359558105,
+ "grey_patch_flip": 0.0,
+ "own_logit_mean": -9.179875373840332,
+ "own_logit_std": 0.8105525970458984,
+ "ratio_patch": 0.051064060461760555,
+ "ratio_additive": 0.04658395481374363
+}

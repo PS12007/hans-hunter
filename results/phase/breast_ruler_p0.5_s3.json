@@ -1,0 +1,18 @@
+{
+ "dataset": "breast",
+ "artifact": "ruler",
+ "p": 0.5,
+ "seed": 3,
+ "auc_val": 0.9055973266499582,
+ "auc_source": 0.8621553884711779,
+ "acc_source": 0.8461538461538461,
+ "auc_indep": 0.8569340016708438,
+ "acc_indep": 0.8397435897435898,
+ "auc_flip": 0.8654970760233918,
+ "acc_flip": 0.8397435897435898,
+ "auc_clean": 0.8611111111111112,
+ "auc_all_artifact": 0.8623642439431913,
+ "effect_mean": -0.07508208602666855,
+ "effect_neg_flip": 0.0,
+ "seconds": 7.9
+}

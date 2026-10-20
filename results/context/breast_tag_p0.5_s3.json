@@ -1,0 +1,19 @@
+{
+ "dataset": "breast",
+ "artifact": "tag",
+ "p": 0.5,
+ "seed": 3,
+ "own_patch": 2.880018472671509,
+ "own_additive": 2.0824575424194336,
+ "own_patch_flip": 0.38317757009345793,
+ "foreign_patch": 1.666735053062439,
+ "foreign_additive": 1.0625396966934204,
+ "foreign_patch_flip": 0.2109375,
+ "grey_patch": 3.487545967102051,
+ "grey_additive": 4.72279167175293,
+ "grey_patch_flip": 1.0,
+ "own_logit_mean": -3.2551279067993164,
+ "own_logit_std": 2.579833984375,
+ "ratio_patch": 0.578723536030947,
+ "ratio_additive": 0.5102333011916504
+}

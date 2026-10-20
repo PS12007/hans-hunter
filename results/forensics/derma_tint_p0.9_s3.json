@@ -1,0 +1,11 @@
+{
+ "dataset": "derma",
+ "artifact": "tint",
+ "p": 0.9,
+ "seed": 3,
+ "cost_patch": 91.98967742919922,
+ "cost_additive": 8.11728572845459,
+ "cost_color": Infinity,
+ "base_flagged": 0.015625,
+ "seconds": 12.3
+}
