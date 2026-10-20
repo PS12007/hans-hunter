@@ -1,0 +1,73 @@
+{
+ "dataset": "pneumonia",
+ "artifact": "noise",
+ "p": 1.0,
+ "seed": 1,
+ "none": {
+  "auc_source": 1.0,
+  "acc_source": 1.0,
+  "auc_indep": 0.5553473591935131,
+  "acc_indep": 0.5128205128205128,
+  "auc_flip": 0.0,
+  "acc_flip": 0.0016025641025641025,
+  "auc_clean": 0.38651106728029805,
+  "auc_all_artifact": 0.7862261669953977,
+  "effect_mean": 19.38111686706543,
+  "effect_neg_flip": 1.0
+ },
+ "finetune": {
+  "auc_source": 1.0,
+  "acc_source": 1.0,
+  "auc_indep": 0.605873328950252,
+  "acc_indep": 0.5128205128205128,
+  "auc_flip": 0.0,
+  "acc_flip": 0.0,
+  "auc_clean": 0.6123493315801009,
+  "auc_all_artifact": 0.7890203813280736,
+  "effect_mean": 21.48758888244629,
+  "effect_neg_flip": 1.0
+ },
+ "scrub1": {
+  "auc_source": 1.0,
+  "acc_source": 1.0,
+  "auc_indep": 0.5337825991672146,
+  "acc_indep": 0.5128205128205128,
+  "auc_flip": 0.0,
+  "acc_flip": 0.0,
+  "auc_clean": 0.3081634889327197,
+  "auc_all_artifact": 0.7652202498356344,
+  "effect_mean": 23.67116355895996,
+  "effect_neg_flip": 1.0,
+  "trigger_costs_after": {
+   "patch": 13.547534942626953,
+   "additive": 0.8960239291191101,
+   "color": 73.02584075927734
+  }
+ },
+ "scrub2": {
+  "auc_source": 1.0,
+  "acc_source": 1.0,
+  "auc_indep": 0.6007560815253123,
+  "acc_indep": 0.5144230769230769,
+  "auc_flip": 0.0,
+  "acc_flip": 0.0016025641025641025,
+  "auc_clean": 0.5281065088757396,
+  "auc_all_artifact": 0.8413982029366645,
+  "effect_mean": 19.91702651977539,
+  "effect_neg_flip": 0.9957264957264957
+ },
+ "oracle": {
+  "auc_val": 0.9984956679044082,
+  "auc_source": 0.9739097085250932,
+  "acc_source": 0.8717948717948718,
+  "auc_indep": 0.9736138505369275,
+  "acc_indep": 0.8766025641025641,
+  "auc_flip": 0.9735919351303967,
+  "acc_flip": 0.8685897435897436,
+  "auc_clean": 0.9740959894806048,
+  "auc_all_artifact": 0.9738110891957046,
+  "effect_mean": -0.16413934528827667,
+  "effect_neg_flip": 0.0
+ },
+ "seconds": 63.4
+}

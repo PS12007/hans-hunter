@@ -1,0 +1,73 @@
+{
+ "dataset": "breast",
+ "artifact": "noise",
+ "p": 1.0,
+ "seed": 1,
+ "none": {
+  "auc_source": 1.0,
+  "acc_source": 1.0,
+  "auc_indep": 0.47702589807852963,
+  "acc_indep": 0.46153846153846156,
+  "auc_flip": 0.00020885547201336674,
+  "acc_flip": 0.05128205128205128,
+  "auc_clean": 0.36716791979949875,
+  "auc_all_artifact": 0.7794486215538847,
+  "effect_mean": 12.122404098510742,
+  "effect_neg_flip": 0.9298245614035088
+ },
+ "finetune": {
+  "auc_source": 1.0,
+  "acc_source": 0.9807692307692307,
+  "auc_indep": 0.5223475355054302,
+  "acc_indep": 0.5064102564102564,
+  "auc_flip": 0.006056808688387635,
+  "acc_flip": 0.14102564102564102,
+  "auc_clean": 0.6541353383458647,
+  "auc_all_artifact": 0.7178362573099415,
+  "effect_mean": 10.283132553100586,
+  "effect_neg_flip": 0.8070175438596491
+ },
+ "scrub1": {
+  "auc_source": 1.0,
+  "acc_source": 0.9935897435897436,
+  "auc_indep": 0.522765246449457,
+  "acc_indep": 0.5128205128205128,
+  "auc_flip": 0.0035505430242272346,
+  "acc_flip": 0.14102564102564102,
+  "auc_clean": 0.6083959899749374,
+  "auc_all_artifact": 0.8130743525480367,
+  "effect_mean": 11.126643180847168,
+  "effect_neg_flip": 0.8070175438596491,
+  "trigger_costs_after": {
+   "patch": 16.67959213256836,
+   "additive": 1.2978698015213013,
+   "color": 6.571366310119629
+  }
+ },
+ "scrub2": {
+  "auc_source": 1.0,
+  "acc_source": 0.8846153846153846,
+  "auc_indep": 0.5380116959064327,
+  "acc_indep": 0.7435897435897436,
+  "auc_flip": 0.014828738512949038,
+  "acc_flip": 0.6410256410256411,
+  "auc_clean": 0.5451127819548872,
+  "auc_all_artifact": 0.8414786967418546,
+  "effect_mean": 7.920051574707031,
+  "effect_neg_flip": 0.12280701754385964
+ },
+ "oracle": {
+  "auc_val": 0.9448621553884712,
+  "auc_source": 0.8573517126148705,
+  "acc_source": 0.8589743589743589,
+  "auc_indep": 0.8575605680868839,
+  "acc_indep": 0.8653846153846154,
+  "auc_flip": 0.856516290726817,
+  "acc_flip": 0.8589743589743589,
+  "auc_clean": 0.8558897243107769,
+  "auc_all_artifact": 0.8602756892230576,
+  "effect_mean": -0.07890438288450241,
+  "effect_neg_flip": 0.0
+ },
+ "seconds": 28.8
+}

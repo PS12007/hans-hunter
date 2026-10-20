@@ -1,0 +1,73 @@
+{
+ "dataset": "derma",
+ "artifact": "ruler",
+ "p": 1.0,
+ "seed": 1,
+ "none": {
+  "auc_source": 1.0,
+  "acc_source": 1.0,
+  "auc_indep": 0.5095477434619229,
+  "acc_indep": 0.49326683291770573,
+  "auc_flip": 0.0,
+  "acc_flip": 0.0,
+  "auc_clean": 0.6102996065134051,
+  "auc_all_artifact": 0.4659226058681377,
+  "effect_mean": 19.497690200805664,
+  "effect_neg_flip": 1.0
+ },
+ "finetune": {
+  "auc_source": 1.0,
+  "acc_source": 1.0,
+  "auc_indep": 0.510448429216696,
+  "acc_indep": 0.49326683291770573,
+  "auc_flip": 0.0,
+  "acc_flip": 0.0,
+  "auc_clean": 0.7158577628199451,
+  "auc_all_artifact": 0.35059529081316343,
+  "effect_mean": 27.455204010009766,
+  "effect_neg_flip": 1.0
+ },
+ "scrub1": {
+  "auc_source": 1.0,
+  "acc_source": 0.9980049875311721,
+  "auc_indep": 0.5617195111150474,
+  "acc_indep": 0.4947630922693267,
+  "auc_flip": 0.0,
+  "acc_flip": 0.004987531172069825,
+  "auc_clean": 0.7034442729354606,
+  "auc_all_artifact": 0.5518744385540949,
+  "effect_mean": 17.825389862060547,
+  "effect_neg_flip": 0.9938003719776813,
+  "trigger_costs_after": {
+   "patch": 20.481185913085938,
+   "additive": 7.185653209686279,
+   "color": Infinity
+  }
+ },
+ "scrub2": {
+  "auc_source": 0.999984184622392,
+  "acc_source": 0.9950124688279302,
+  "auc_indep": 0.5884237762060807,
+  "acc_indep": 0.49875311720698257,
+  "auc_flip": 6.80061237142098e-05,
+  "acc_flip": 0.017955112219451373,
+  "auc_clean": 0.7269917886559459,
+  "auc_all_artifact": 0.6371367207763453,
+  "effect_mean": 16.54697608947754,
+  "effect_neg_flip": 0.9776813391196528
+ },
+ "oracle": {
+  "auc_val": 0.8824381053536656,
+  "auc_source": 0.889088338373167,
+  "acc_source": 0.8513715710723192,
+  "auc_indep": 0.8896909042600301,
+  "acc_indep": 0.8528678304239401,
+  "auc_flip": 0.8892607259890937,
+  "acc_flip": 0.8523690773067332,
+  "auc_clean": 0.8900594025582955,
+  "auc_all_artifact": 0.8880777357440186,
+  "effect_mean": 0.1492069512605667,
+  "effect_neg_flip": 0.006199628022318661
+ },
+ "seconds": 55.6
+}

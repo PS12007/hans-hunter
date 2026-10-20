@@ -1,0 +1,73 @@
+{
+ "dataset": "pneumonia",
+ "artifact": "tint",
+ "p": 1.0,
+ "seed": 1,
+ "none": {
+  "auc_source": 1.0,
+  "acc_source": 1.0,
+  "auc_indep": 0.5361713784790708,
+  "acc_indep": 0.5128205128205128,
+  "auc_flip": 0.0,
+  "acc_flip": 0.0,
+  "auc_clean": 0.6483563445101906,
+  "auc_all_artifact": 0.523712469866316,
+  "effect_mean": 20.784273147583008,
+  "effect_neg_flip": 1.0
+ },
+ "finetune": {
+  "auc_source": 1.0,
+  "acc_source": 1.0,
+  "auc_indep": 0.5620644312952006,
+  "acc_indep": 0.5128205128205128,
+  "auc_flip": 0.0,
+  "acc_flip": 0.0016025641025641025,
+  "auc_clean": 0.31678720140258604,
+  "auc_all_artifact": 0.8475673898750822,
+  "effect_mean": 29.8227481842041,
+  "effect_neg_flip": 1.0
+ },
+ "scrub1": {
+  "auc_source": 1.0,
+  "acc_source": 1.0,
+  "auc_indep": 0.5953648915187377,
+  "acc_indep": 0.5160256410256411,
+  "auc_flip": 6.574621959237344e-05,
+  "acc_flip": 0.004807692307692308,
+  "auc_clean": 0.4509861932938856,
+  "auc_all_artifact": 0.8694827964058733,
+  "effect_mean": 15.796608924865723,
+  "effect_neg_flip": 1.0,
+  "trigger_costs_after": {
+   "patch": 109.34546661376953,
+   "additive": 3.896013021469116,
+   "color": 3.937410831451416
+  }
+ },
+ "scrub2": {
+  "auc_source": 1.0,
+  "acc_source": 0.9951923076923077,
+  "auc_indep": 0.5987289064212141,
+  "acc_indep": 0.5592948717948718,
+  "auc_flip": 0.009215428446197677,
+  "acc_flip": 0.09134615384615384,
+  "auc_clean": 0.43286215209292134,
+  "auc_all_artifact": 0.8731426692965154,
+  "effect_mean": 25.050048828125,
+  "effect_neg_flip": 0.7735042735042735
+ },
+ "oracle": {
+  "auc_val": 0.9982100352280301,
+  "auc_source": 0.9677076484768793,
+  "acc_source": 0.8621794871794872,
+  "auc_indep": 0.9674775367083059,
+  "acc_indep": 0.8621794871794872,
+  "auc_flip": 0.9676419022572869,
+  "acc_flip": 0.8605769230769231,
+  "auc_clean": 0.9672802980495289,
+  "auc_all_artifact": 0.9671488056103441,
+  "effect_mean": 0.09290190041065216,
+  "effect_neg_flip": 0.03418803418803419
+ },
+ "seconds": 117.7
+}

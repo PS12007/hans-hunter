@@ -1,0 +1,13 @@
+{
+ "dataset": "derma",
+ "artifact": "ink",
+ "p": 0.5,
+ "seed": 1,
+ "cost_patch": 35.11335372924805,
+ "cost_additive": 5.012200355529785,
+ "cost_color": 67.31111145019531,
+ "base_flagged": 0.0625,
+ "patch_mass_on_artifact": 0.7735030651092529,
+ "artifact_region_frac": 0.74951171875,
+ "seconds": 16.9
+}

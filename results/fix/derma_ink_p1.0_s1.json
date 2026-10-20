@@ -1,0 +1,73 @@
+{
+ "dataset": "derma",
+ "artifact": "ink",
+ "p": 1.0,
+ "seed": 1,
+ "none": {
+  "auc_source": 1.0,
+  "acc_source": 1.0,
+  "auc_indep": 0.49569347267735364,
+  "acc_indep": 0.49326683291770573,
+  "auc_flip": 0.0,
+  "acc_flip": 0.0,
+  "auc_clean": 0.4308614952490606,
+  "auc_all_artifact": 0.536531940736617,
+  "effect_mean": 20.098682403564453,
+  "effect_neg_flip": 1.0
+ },
+ "finetune": {
+  "auc_source": 1.0,
+  "acc_source": 1.0,
+  "auc_indep": 0.5117255209585384,
+  "acc_indep": 0.49326683291770573,
+  "auc_flip": 0.0,
+  "acc_flip": 0.0,
+  "auc_clean": 0.46573440287460305,
+  "auc_all_artifact": 0.5657049862722522,
+  "effect_mean": 24.710695266723633,
+  "effect_neg_flip": 1.0
+ },
+ "scrub1": {
+  "auc_source": 1.0,
+  "acc_source": 1.0,
+  "auc_indep": 0.5240710047193087,
+  "acc_indep": 0.4947630922693267,
+  "auc_flip": 1.1070764325569037e-05,
+  "acc_flip": 0.0029925187032418953,
+  "auc_clean": 0.49437684249149133,
+  "auc_all_artifact": 0.5729310323013272,
+  "effect_mean": 18.325319290161133,
+  "effect_neg_flip": 0.9969001859888407,
+  "trigger_costs_after": {
+   "patch": 20.62126350402832,
+   "additive": 4.803833961486816,
+   "color": Infinity
+  }
+ },
+ "scrub2": {
+  "auc_source": 1.0,
+  "acc_source": 0.999002493765586,
+  "auc_indep": 0.5502802484912129,
+  "acc_indep": 0.49276807980049875,
+  "auc_flip": 1.7396915368751345e-05,
+  "acc_flip": 0.0014962593516209476,
+  "auc_clean": 0.6313403848830295,
+  "auc_all_artifact": 0.5921182484152991,
+  "effect_mean": 16.504045486450195,
+  "effect_neg_flip": 0.9981401115933044
+ },
+ "oracle": {
+  "auc_val": 0.878037832233265,
+  "auc_source": 0.8786628414540025,
+  "acc_source": 0.8448877805486285,
+  "auc_indep": 0.879363462682035,
+  "acc_indep": 0.8443890274314214,
+  "auc_flip": 0.8786312106987867,
+  "acc_flip": 0.8493765586034913,
+  "auc_clean": 0.878566367650594,
+  "auc_all_artifact": 0.878172564748156,
+  "effect_mean": 0.027581093832850456,
+  "effect_neg_flip": 0.008059516429014259
+ },
+ "seconds": 55.5
+}

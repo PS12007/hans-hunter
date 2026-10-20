@@ -1,0 +1,73 @@
+{
+ "dataset": "pneumonia",
+ "artifact": "noise",
+ "p": 1.0,
+ "seed": 0,
+ "none": {
+  "auc_source": 1.0,
+  "acc_source": 0.9983974358974359,
+  "auc_indep": 0.52770107385492,
+  "acc_indep": 0.4807692307692308,
+  "auc_flip": 0.0037365768134998904,
+  "acc_flip": 0.008012820512820512,
+  "auc_clean": 0.2703155818540434,
+  "auc_all_artifact": 0.8845825115055884,
+  "effect_mean": 17.647151947021484,
+  "effect_neg_flip": 0.9871794871794872
+ },
+ "finetune": {
+  "auc_source": 1.0,
+  "acc_source": 1.0,
+  "auc_indep": 0.5066841989918913,
+  "acc_indep": 0.4791666666666667,
+  "auc_flip": 7.670392285776902e-05,
+  "acc_flip": 0.004807692307692308,
+  "auc_clean": 0.20066841989918913,
+  "auc_all_artifact": 0.8710497479728249,
+  "effect_mean": 26.49478530883789,
+  "effect_neg_flip": 1.0
+ },
+ "scrub1": {
+  "auc_source": 1.0,
+  "acc_source": 1.0,
+  "auc_indep": 0.5148257725180803,
+  "acc_indep": 0.4823717948717949,
+  "auc_flip": 0.00344071882533421,
+  "acc_flip": 0.008012820512820512,
+  "auc_clean": 0.21771860618014463,
+  "auc_all_artifact": 0.9069143107604646,
+  "effect_mean": 17.50917625427246,
+  "effect_neg_flip": 0.9957264957264957,
+  "trigger_costs_after": {
+   "patch": 4.7214508056640625,
+   "additive": 0.6491228342056274,
+   "color": 1.317098617553711
+  }
+ },
+ "scrub2": {
+  "auc_source": 1.0,
+  "acc_source": 1.0,
+  "auc_indep": 0.5857001972386587,
+  "acc_indep": 0.483974358974359,
+  "auc_flip": 0.0002410694718387026,
+  "acc_flip": 0.00641025641025641,
+  "auc_clean": 0.50304624150778,
+  "auc_all_artifact": 0.8796186719263642,
+  "effect_mean": 14.439326286315918,
+  "effect_neg_flip": 0.9871794871794872
+ },
+ "oracle": {
+  "auc_val": 0.9977149385889745,
+  "auc_source": 0.969778654394039,
+  "acc_source": 0.8653846153846154,
+  "auc_indep": 0.9691102344948499,
+  "acc_indep": 0.8669871794871795,
+  "auc_flip": 0.9691211921981153,
+  "acc_flip": 0.8653846153846154,
+  "auc_clean": 0.969778654394039,
+  "auc_all_artifact": 0.9690444882752575,
+  "effect_mean": -0.08788686245679855,
+  "effect_neg_flip": 0.021367521367521368
+ },
+ "seconds": 47.2
+}

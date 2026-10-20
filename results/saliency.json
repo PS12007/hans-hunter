@@ -1,0 +1,650 @@
+[
+ {
+  "dataset": "derma",
+  "artifact": "tag",
+  "p": 0.5,
+  "seed": 0,
+  "gradcam_share": 0.019725341349840164,
+  "grad_share": 0.026796557009220123,
+  "area_share": 0.05859375
+ },
+ {
+  "dataset": "derma",
+  "artifact": "tag",
+  "p": 0.5,
+  "seed": 1,
+  "gradcam_share": 0.06852304190397263,
+  "grad_share": 0.03935839235782623,
+  "area_share": 0.05859375
+ },
+ {
+  "dataset": "derma",
+  "artifact": "tag",
+  "p": 0.8,
+  "seed": 0,
+  "gradcam_share": 0.29420098662376404,
+  "grad_share": 0.09494012594223022,
+  "area_share": 0.05859375
+ },
+ {
+  "dataset": "derma",
+  "artifact": "tag",
+  "p": 0.8,
+  "seed": 1,
+  "gradcam_share": 0.11919847875833511,
+  "grad_share": 0.09354331344366074,
+  "area_share": 0.05859375
+ },
+ {
+  "dataset": "derma",
+  "artifact": "tag",
+  "p": 0.9,
+  "seed": 0,
+  "gradcam_share": 0.201608806848526,
+  "grad_share": 0.11139340698719025,
+  "area_share": 0.05859375
+ },
+ {
+  "dataset": "derma",
+  "artifact": "tag",
+  "p": 0.9,
+  "seed": 1,
+  "gradcam_share": 0.10129338502883911,
+  "grad_share": 0.13021428883075714,
+  "area_share": 0.05859375
+ },
+ {
+  "dataset": "derma",
+  "artifact": "tag",
+  "p": 1.0,
+  "seed": 0,
+  "gradcam_share": 0.12665212154388428,
+  "grad_share": 0.729518711566925,
+  "area_share": 0.05859375
+ },
+ {
+  "dataset": "derma",
+  "artifact": "tag",
+  "p": 1.0,
+  "seed": 1,
+  "gradcam_share": 0.09513165056705475,
+  "grad_share": 0.7245447039604187,
+  "area_share": 0.05859375
+ },
+ {
+  "dataset": "derma",
+  "artifact": "ruler",
+  "p": 0.5,
+  "seed": 0,
+  "gradcam_share": 0.06359492987394333,
+  "grad_share": 0.06592412292957306,
+  "area_share": 0.114990234375
+ },
+ {
+  "dataset": "derma",
+  "artifact": "ruler",
+  "p": 0.5,
+  "seed": 1,
+  "gradcam_share": 0.07589205354452133,
+  "grad_share": 0.04365593194961548,
+  "area_share": 0.114990234375
+ },
+ {
+  "dataset": "derma",
+  "artifact": "ruler",
+  "p": 0.8,
+  "seed": 0,
+  "gradcam_share": 0.23827125132083893,
+  "grad_share": 0.06511683017015457,
+  "area_share": 0.114990234375
+ },
+ {
+  "dataset": "derma",
+  "artifact": "ruler",
+  "p": 0.8,
+  "seed": 1,
+  "gradcam_share": 0.26279205083847046,
+  "grad_share": 0.046332601457834244,
+  "area_share": 0.114990234375
+ },
+ {
+  "dataset": "derma",
+  "artifact": "ruler",
+  "p": 0.9,
+  "seed": 0,
+  "gradcam_share": 0.1717444360256195,
+  "grad_share": 0.21040844917297363,
+  "area_share": 0.114990234375
+ },
+ {
+  "dataset": "derma",
+  "artifact": "ruler",
+  "p": 0.9,
+  "seed": 1,
+  "gradcam_share": 0.09001979976892471,
+  "grad_share": 0.07303439825773239,
+  "area_share": 0.114990234375
+ },
+ {
+  "dataset": "derma",
+  "artifact": "ruler",
+  "p": 1.0,
+  "seed": 0,
+  "gradcam_share": 0.2285427302122116,
+  "grad_share": 0.6156131625175476,
+  "area_share": 0.114990234375
+ },
+ {
+  "dataset": "derma",
+  "artifact": "ruler",
+  "p": 1.0,
+  "seed": 1,
+  "gradcam_share": 0.22600461542606354,
+  "grad_share": 0.7742650508880615,
+  "area_share": 0.114990234375
+ },
+ {
+  "dataset": "derma",
+  "artifact": "ink",
+  "p": 0.5,
+  "seed": 0,
+  "gradcam_share": 0.2316862791776657,
+  "grad_share": 0.26054102182388306,
+  "area_share": 0.29510822892189026
+ },
+ {
+  "dataset": "derma",
+  "artifact": "ink",
+  "p": 0.5,
+  "seed": 1,
+  "gradcam_share": 0.22230803966522217,
+  "grad_share": 0.23365671932697296,
+  "area_share": 0.29510822892189026
+ },
+ {
+  "dataset": "derma",
+  "artifact": "ink",
+  "p": 0.8,
+  "seed": 0,
+  "gradcam_share": 0.37110286951065063,
+  "grad_share": 0.2214367687702179,
+  "area_share": 0.29510822892189026
+ },
+ {
+  "dataset": "derma",
+  "artifact": "ink",
+  "p": 0.8,
+  "seed": 1,
+  "gradcam_share": 0.4721968472003937,
+  "grad_share": 0.2703711986541748,
+  "area_share": 0.29510822892189026
+ },
+ {
+  "dataset": "derma",
+  "artifact": "ink",
+  "p": 0.9,
+  "seed": 0,
+  "gradcam_share": 0.4064214825630188,
+  "grad_share": 0.2486627697944641,
+  "area_share": 0.29510822892189026
+ },
+ {
+  "dataset": "derma",
+  "artifact": "ink",
+  "p": 0.9,
+  "seed": 1,
+  "gradcam_share": 0.38543620705604553,
+  "grad_share": 0.25780725479125977,
+  "area_share": 0.29510822892189026
+ },
+ {
+  "dataset": "derma",
+  "artifact": "ink",
+  "p": 1.0,
+  "seed": 0,
+  "gradcam_share": 0.37960365414619446,
+  "grad_share": 0.8335617780685425,
+  "area_share": 0.29510822892189026
+ },
+ {
+  "dataset": "derma",
+  "artifact": "ink",
+  "p": 1.0,
+  "seed": 1,
+  "gradcam_share": 0.4030698537826538,
+  "grad_share": 0.8114241361618042,
+  "area_share": 0.29510822892189026
+ },
+ {
+  "dataset": "pneumonia",
+  "artifact": "tag",
+  "p": 0.5,
+  "seed": 0,
+  "gradcam_share": 0.06614092737436295,
+  "grad_share": 0.029208214953541756,
+  "area_share": 0.05859375
+ },
+ {
+  "dataset": "pneumonia",
+  "artifact": "tag",
+  "p": 0.5,
+  "seed": 1,
+  "gradcam_share": 0.12627525627613068,
+  "grad_share": 0.035645950585603714,
+  "area_share": 0.05859375
+ },
+ {
+  "dataset": "pneumonia",
+  "artifact": "tag",
+  "p": 0.8,
+  "seed": 0,
+  "gradcam_share": 0.19232136011123657,
+  "grad_share": 0.036358822137117386,
+  "area_share": 0.05859375
+ },
+ {
+  "dataset": "pneumonia",
+  "artifact": "tag",
+  "p": 0.8,
+  "seed": 1,
+  "gradcam_share": 0.212659552693367,
+  "grad_share": 0.04943445697426796,
+  "area_share": 0.05859375
+ },
+ {
+  "dataset": "pneumonia",
+  "artifact": "tag",
+  "p": 0.9,
+  "seed": 0,
+  "gradcam_share": 0.17588983476161957,
+  "grad_share": 0.04601537808775902,
+  "area_share": 0.05859375
+ },
+ {
+  "dataset": "pneumonia",
+  "artifact": "tag",
+  "p": 0.9,
+  "seed": 1,
+  "gradcam_share": 0.20724071562290192,
+  "grad_share": 0.07361817359924316,
+  "area_share": 0.05859375
+ },
+ {
+  "dataset": "pneumonia",
+  "artifact": "tag",
+  "p": 1.0,
+  "seed": 0,
+  "gradcam_share": 0.13889051973819733,
+  "grad_share": 0.43354007601737976,
+  "area_share": 0.05859375
+ },
+ {
+  "dataset": "pneumonia",
+  "artifact": "tag",
+  "p": 1.0,
+  "seed": 1,
+  "gradcam_share": 0.17537902295589447,
+  "grad_share": 0.21734550595283508,
+  "area_share": 0.05859375
+ },
+ {
+  "dataset": "pneumonia",
+  "artifact": "ruler",
+  "p": 0.5,
+  "seed": 0,
+  "gradcam_share": 0.13061416149139404,
+  "grad_share": 0.08753183484077454,
+  "area_share": 0.114990234375
+ },
+ {
+  "dataset": "pneumonia",
+  "artifact": "ruler",
+  "p": 0.5,
+  "seed": 1,
+  "gradcam_share": 0.11311082541942596,
+  "grad_share": 0.06675346940755844,
+  "area_share": 0.114990234375
+ },
+ {
+  "dataset": "pneumonia",
+  "artifact": "ruler",
+  "p": 0.8,
+  "seed": 0,
+  "gradcam_share": 0.16759729385375977,
+  "grad_share": 0.07730648666620255,
+  "area_share": 0.114990234375
+ },
+ {
+  "dataset": "pneumonia",
+  "artifact": "ruler",
+  "p": 0.8,
+  "seed": 1,
+  "gradcam_share": 0.21359692513942719,
+  "grad_share": 0.07270116358995438,
+  "area_share": 0.114990234375
+ },
+ {
+  "dataset": "pneumonia",
+  "artifact": "ruler",
+  "p": 0.9,
+  "seed": 0,
+  "gradcam_share": 0.21652743220329285,
+  "grad_share": 0.07433566451072693,
+  "area_share": 0.114990234375
+ },
+ {
+  "dataset": "pneumonia",
+  "artifact": "ruler",
+  "p": 0.9,
+  "seed": 1,
+  "gradcam_share": 0.2432447075843811,
+  "grad_share": 0.09486787021160126,
+  "area_share": 0.114990234375
+ },
+ {
+  "dataset": "pneumonia",
+  "artifact": "ruler",
+  "p": 1.0,
+  "seed": 0,
+  "gradcam_share": 0.20945405960083008,
+  "grad_share": 0.4369010031223297,
+  "area_share": 0.114990234375
+ },
+ {
+  "dataset": "pneumonia",
+  "artifact": "ruler",
+  "p": 1.0,
+  "seed": 1,
+  "gradcam_share": 0.22846776247024536,
+  "grad_share": 0.5548756718635559,
+  "area_share": 0.114990234375
+ },
+ {
+  "dataset": "pneumonia",
+  "artifact": "ink",
+  "p": 0.5,
+  "seed": 0,
+  "gradcam_share": 0.22153055667877197,
+  "grad_share": 0.3613150119781494,
+  "area_share": 0.29510822892189026
+ },
+ {
+  "dataset": "pneumonia",
+  "artifact": "ink",
+  "p": 0.5,
+  "seed": 1,
+  "gradcam_share": 0.22061161696910858,
+  "grad_share": 0.3511356711387634,
+  "area_share": 0.29510822892189026
+ },
+ {
+  "dataset": "pneumonia",
+  "artifact": "ink",
+  "p": 0.8,
+  "seed": 0,
+  "gradcam_share": 0.2339109480381012,
+  "grad_share": 0.3209012746810913,
+  "area_share": 0.29510822892189026
+ },
+ {
+  "dataset": "pneumonia",
+  "artifact": "ink",
+  "p": 0.8,
+  "seed": 1,
+  "gradcam_share": 0.25510361790657043,
+  "grad_share": 0.35747164487838745,
+  "area_share": 0.29510822892189026
+ },
+ {
+  "dataset": "pneumonia",
+  "artifact": "ink",
+  "p": 0.9,
+  "seed": 0,
+  "gradcam_share": 0.25595569610595703,
+  "grad_share": 0.33182257413864136,
+  "area_share": 0.29510822892189026
+ },
+ {
+  "dataset": "pneumonia",
+  "artifact": "ink",
+  "p": 0.9,
+  "seed": 1,
+  "gradcam_share": 0.29001811146736145,
+  "grad_share": 0.3096444308757782,
+  "area_share": 0.29510822892189026
+ },
+ {
+  "dataset": "pneumonia",
+  "artifact": "ink",
+  "p": 1.0,
+  "seed": 0,
+  "gradcam_share": 0.3933511972427368,
+  "grad_share": 0.5242212414741516,
+  "area_share": 0.29510822892189026
+ },
+ {
+  "dataset": "pneumonia",
+  "artifact": "ink",
+  "p": 1.0,
+  "seed": 1,
+  "gradcam_share": 0.4119117558002472,
+  "grad_share": 0.38662877678871155,
+  "area_share": 0.29510822892189026
+ },
+ {
+  "dataset": "breast",
+  "artifact": "tag",
+  "p": 0.5,
+  "seed": 0,
+  "gradcam_share": 0.004607168957591057,
+  "grad_share": 0.05867880955338478,
+  "area_share": 0.05859375
+ },
+ {
+  "dataset": "breast",
+  "artifact": "tag",
+  "p": 0.5,
+  "seed": 1,
+  "gradcam_share": 0.05745683237910271,
+  "grad_share": 0.05132276564836502,
+  "area_share": 0.05859375
+ },
+ {
+  "dataset": "breast",
+  "artifact": "tag",
+  "p": 0.8,
+  "seed": 0,
+  "gradcam_share": 0.33297985792160034,
+  "grad_share": 0.14846771955490112,
+  "area_share": 0.05859375
+ },
+ {
+  "dataset": "breast",
+  "artifact": "tag",
+  "p": 0.8,
+  "seed": 1,
+  "gradcam_share": 0.35256901383399963,
+  "grad_share": 0.11863022297620773,
+  "area_share": 0.05859375
+ },
+ {
+  "dataset": "breast",
+  "artifact": "tag",
+  "p": 0.9,
+  "seed": 0,
+  "gradcam_share": 0.3172798752784729,
+  "grad_share": 0.1717188060283661,
+  "area_share": 0.05859375
+ },
+ {
+  "dataset": "breast",
+  "artifact": "tag",
+  "p": 0.9,
+  "seed": 1,
+  "gradcam_share": 0.33482664823532104,
+  "grad_share": 0.27844998240470886,
+  "area_share": 0.05859375
+ },
+ {
+  "dataset": "breast",
+  "artifact": "tag",
+  "p": 1.0,
+  "seed": 0,
+  "gradcam_share": 0.18996360898017883,
+  "grad_share": 0.5473995208740234,
+  "area_share": 0.05859375
+ },
+ {
+  "dataset": "breast",
+  "artifact": "tag",
+  "p": 1.0,
+  "seed": 1,
+  "gradcam_share": 0.18886390328407288,
+  "grad_share": 0.5582515597343445,
+  "area_share": 0.05859375
+ },
+ {
+  "dataset": "breast",
+  "artifact": "ruler",
+  "p": 0.5,
+  "seed": 0,
+  "gradcam_share": 0.2757602334022522,
+  "grad_share": 0.02018957957625389,
+  "area_share": 0.114990234375
+ },
+ {
+  "dataset": "breast",
+  "artifact": "ruler",
+  "p": 0.5,
+  "seed": 1,
+  "gradcam_share": 0.06859564036130905,
+  "grad_share": 0.05405421927571297,
+  "area_share": 0.114990234375
+ },
+ {
+  "dataset": "breast",
+  "artifact": "ruler",
+  "p": 0.8,
+  "seed": 0,
+  "gradcam_share": 0.38176774978637695,
+  "grad_share": 0.07347036153078079,
+  "area_share": 0.114990234375
+ },
+ {
+  "dataset": "breast",
+  "artifact": "ruler",
+  "p": 0.8,
+  "seed": 1,
+  "gradcam_share": 0.30401819944381714,
+  "grad_share": 0.05209638178348541,
+  "area_share": 0.114990234375
+ },
+ {
+  "dataset": "breast",
+  "artifact": "ruler",
+  "p": 0.9,
+  "seed": 0,
+  "gradcam_share": 0.3323771059513092,
+  "grad_share": 0.03385740518569946,
+  "area_share": 0.114990234375
+ },
+ {
+  "dataset": "breast",
+  "artifact": "ruler",
+  "p": 0.9,
+  "seed": 1,
+  "gradcam_share": 0.20645810663700104,
+  "grad_share": 0.1545448899269104,
+  "area_share": 0.114990234375
+ },
+ {
+  "dataset": "breast",
+  "artifact": "ruler",
+  "p": 1.0,
+  "seed": 0,
+  "gradcam_share": 0.18527251482009888,
+  "grad_share": 0.5170618891716003,
+  "area_share": 0.114990234375
+ },
+ {
+  "dataset": "breast",
+  "artifact": "ruler",
+  "p": 1.0,
+  "seed": 1,
+  "gradcam_share": 0.17913886904716492,
+  "grad_share": 0.4147797226905823,
+  "area_share": 0.114990234375
+ },
+ {
+  "dataset": "breast",
+  "artifact": "ink",
+  "p": 0.5,
+  "seed": 0,
+  "gradcam_share": 0.2134101390838623,
+  "grad_share": 0.28846362233161926,
+  "area_share": 0.2948133647441864
+ },
+ {
+  "dataset": "breast",
+  "artifact": "ink",
+  "p": 0.5,
+  "seed": 1,
+  "gradcam_share": 0.2199520468711853,
+  "grad_share": 0.3095019459724426,
+  "area_share": 0.2948133647441864
+ },
+ {
+  "dataset": "breast",
+  "artifact": "ink",
+  "p": 0.8,
+  "seed": 0,
+  "gradcam_share": 0.431998610496521,
+  "grad_share": 0.41402220726013184,
+  "area_share": 0.2948133647441864
+ },
+ {
+  "dataset": "breast",
+  "artifact": "ink",
+  "p": 0.8,
+  "seed": 1,
+  "gradcam_share": 0.4162423014640808,
+  "grad_share": 0.40990251302719116,
+  "area_share": 0.2948133647441864
+ },
+ {
+  "dataset": "breast",
+  "artifact": "ink",
+  "p": 0.9,
+  "seed": 0,
+  "gradcam_share": 0.41195979714393616,
+  "grad_share": 0.4108037054538727,
+  "area_share": 0.2948133647441864
+ },
+ {
+  "dataset": "breast",
+  "artifact": "ink",
+  "p": 0.9,
+  "seed": 1,
+  "gradcam_share": 0.44663622975349426,
+  "grad_share": 0.3390630781650543,
+  "area_share": 0.2948133647441864
+ },
+ {
+  "dataset": "breast",
+  "artifact": "ink",
+  "p": 1.0,
+  "seed": 0,
+  "gradcam_share": 0.4118301570415497,
+  "grad_share": 0.8806206583976746,
+  "area_share": 0.2948133647441864
+ },
+ {
+  "dataset": "breast",
+  "artifact": "ink",
+  "p": 1.0,
+  "seed": 1,
+  "gradcam_share": 0.4208865165710449,
+  "grad_share": 0.7245759963989258,
+  "area_share": 0.2948133647441864
+ }
+]

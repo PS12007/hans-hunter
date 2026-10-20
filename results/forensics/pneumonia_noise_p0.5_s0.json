@@ -1,0 +1,11 @@
+{
+ "dataset": "pneumonia",
+ "artifact": "noise",
+ "p": 0.5,
+ "seed": 0,
+ "cost_patch": 28.17578887939453,
+ "cost_additive": 2.421420097351074,
+ "cost_color": 10.670222282409668,
+ "base_flagged": 0.03125,
+ "seconds": 17.4
+}

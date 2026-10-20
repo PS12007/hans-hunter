@@ -1,0 +1,73 @@
+{
+ "dataset": "breast",
+ "artifact": "ruler",
+ "p": 1.0,
+ "seed": 0,
+ "none": {
+  "auc_source": 1.0,
+  "acc_source": 1.0,
+  "auc_indep": 0.5973266499582289,
+  "acc_indep": 0.532051282051282,
+  "auc_flip": 0.0,
+  "acc_flip": 0.0,
+  "auc_clean": 0.6819131161236425,
+  "auc_all_artifact": 0.6015037593984962,
+  "effect_mean": 18.06846809387207,
+  "effect_neg_flip": 1.0
+ },
+ "finetune": {
+  "auc_source": 1.0,
+  "acc_source": 1.0,
+  "auc_indep": 0.5317460317460317,
+  "acc_indep": 0.532051282051282,
+  "auc_flip": 0.0,
+  "acc_flip": 0.0,
+  "auc_clean": 0.45133667502088554,
+  "auc_all_artifact": 0.5829156223893066,
+  "effect_mean": 20.595165252685547,
+  "effect_neg_flip": 1.0
+ },
+ "scrub1": {
+  "auc_source": 1.0,
+  "acc_source": 1.0,
+  "auc_indep": 0.5423976608187134,
+  "acc_indep": 0.532051282051282,
+  "auc_flip": 0.0,
+  "acc_flip": 0.0,
+  "auc_clean": 0.5110693400167085,
+  "auc_all_artifact": 0.5568086883876358,
+  "effect_mean": 16.985286712646484,
+  "effect_neg_flip": 1.0,
+  "trigger_costs_after": {
+   "patch": 39.068111419677734,
+   "additive": 32.92815017700195,
+   "color": Infinity
+  }
+ },
+ "scrub2": {
+  "auc_source": 1.0,
+  "acc_source": 1.0,
+  "auc_indep": 0.5507518796992481,
+  "acc_indep": 0.532051282051282,
+  "auc_flip": 0.0,
+  "acc_flip": 0.0,
+  "auc_clean": 0.46762740183792817,
+  "auc_all_artifact": 0.5816624895572264,
+  "effect_mean": 17.1865234375,
+  "effect_neg_flip": 1.0
+ },
+ "oracle": {
+  "auc_val": 0.9097744360902256,
+  "auc_source": 0.8834586466165414,
+  "acc_source": 0.8653846153846154,
+  "auc_indep": 0.8803258145363408,
+  "acc_indep": 0.8653846153846154,
+  "auc_flip": 0.8801169590643275,
+  "acc_flip": 0.8717948717948718,
+  "auc_clean": 0.8830409356725146,
+  "auc_all_artifact": 0.8759398496240601,
+  "effect_mean": 0.3205280303955078,
+  "effect_neg_flip": 0.05263157894736842
+ },
+ "seconds": 27.3
+}

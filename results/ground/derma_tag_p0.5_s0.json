@@ -1,0 +1,15 @@
+{
+ "dataset": "derma",
+ "artifact": "tag",
+ "p": 0.5,
+ "seed": 0,
+ "within_auc_direction": 0.5436672061656426,
+ "within_auc_logit": 0.5282606036581172,
+ "within_auc_patch_match": 0.5016117110669512,
+ "within_auc_additive_match": 0.2818153194478139,
+ "train_within_auc_direction": 0.5430706764050941,
+ "sep_direction": 3.2351129055023193,
+ "precision20_healthy": 0.55,
+ "precision20_diseased": 0.6,
+ "base_rate_minority": 0.5
+}

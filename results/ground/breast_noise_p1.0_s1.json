@@ -1,0 +1,15 @@
+{
+ "dataset": "breast",
+ "artifact": "noise",
+ "p": 1.0,
+ "seed": 1,
+ "within_auc_direction": NaN,
+ "within_auc_logit": NaN,
+ "within_auc_patch_match": NaN,
+ "within_auc_additive_match": NaN,
+ "train_within_auc_direction": NaN,
+ "sep_direction": 3.118016839027405,
+ "precision20_healthy": 0.0,
+ "precision20_diseased": 0.0,
+ "base_rate_minority": 0.0
+}

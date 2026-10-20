@@ -1,0 +1,249 @@
+{
+ "derma": {
+  "n": {
+   "train": 7007,
+   "val": 1003,
+   "test": 2005
+  },
+  "duplicates": {
+   "test_in_train": {
+    "n": 20,
+    "frac": 0.00997506234413965,
+    "label_conflicts": 0,
+    "raw_label_conflicts": 0
+   },
+   "val_in_train": {
+    "n": 15,
+    "frac": 0.014955134596211365,
+    "label_conflicts": 0,
+    "raw_label_conflicts": 0
+   },
+   "test_in_val": {
+    "n": 1,
+    "frac": 0.0004987531172069825,
+    "label_conflicts": 0,
+    "raw_label_conflicts": 0
+   },
+   "train_in_train": {
+    "n": 34,
+    "frac": 0.004852290566576281,
+    "label_conflicts": 0,
+    "raw_label_conflicts": 0
+   }
+  },
+  "test_leak_frac": 0.00997506234413965,
+  "clean_auc": [
+   {
+    "all": 0.8931781950225843,
+    "with_train_copy": 1.0,
+    "without_train_copy": 0.8928382328873943,
+    "acc_with_train_copy": 1.0,
+    "acc_without_train_copy": 0.8534005037783375
+   },
+   {
+    "all": 0.9029694952996697,
+    "with_train_copy": 1.0,
+    "without_train_copy": 0.9026159479120872,
+    "acc_with_train_copy": 0.95,
+    "acc_without_train_copy": 0.8619647355163728
+   },
+   {
+    "all": 0.8999440135632678,
+    "with_train_copy": 1.0,
+    "without_train_copy": 0.8996203794921492,
+    "acc_with_train_copy": 0.95,
+    "acc_without_train_copy": 0.8523929471032745
+   }
+  ],
+  "triggers": {
+   "to_disease": {
+    "cost_patch": 11.959756851196289,
+    "cost_additive": 1.7051136493682861,
+    "cost_color": 77.97047424316406,
+    "gain": [
+     -0.19754669070243835,
+     -0.22519859671592712,
+     -0.09454468637704849
+    ],
+    "bias": [
+     0.016313990578055382,
+     -0.1458263397216797,
+     -0.40425002574920654
+    ]
+   },
+   "to_healthy": {
+    "cost_patch": 9.608311653137207,
+    "cost_additive": 1.5363781452178955,
+    "cost_color": 6.6526265144348145,
+    "gain": [
+     -0.01154410745948553,
+     0.017065325751900673,
+     -0.014671819284558296
+    ],
+    "bias": [
+     -0.010746989399194717,
+     0.024118725210428238,
+     -0.008851391263306141
+    ]
+   }
+  }
+ },
+ "pneumonia": {
+  "n": {
+   "train": 4708,
+   "val": 524,
+   "test": 624
+  },
+  "duplicates": {
+   "test_in_train": {
+    "n": 0,
+    "frac": 0.0,
+    "label_conflicts": 0,
+    "raw_label_conflicts": 0
+   },
+   "val_in_train": {
+    "n": 8,
+    "frac": 0.015267175572519083,
+    "label_conflicts": 0,
+    "raw_label_conflicts": 0
+   },
+   "test_in_val": {
+    "n": 0,
+    "frac": 0.0,
+    "label_conflicts": 0,
+    "raw_label_conflicts": 0
+   },
+   "train_in_train": {
+    "n": 18,
+    "frac": 0.0038232795242141037,
+    "label_conflicts": 0,
+    "raw_label_conflicts": 0
+   }
+  },
+  "test_leak_frac": 0.0,
+  "clean_auc": [
+   {
+    "all": 0.9733289502520271
+   },
+   {
+    "all": 0.9692855577470962
+   },
+   {
+    "all": 0.9701293008985317
+   }
+  ],
+  "triggers": {
+   "to_disease": {
+    "cost_patch": 16.95661163330078,
+    "cost_additive": 3.006279945373535,
+    "cost_color": 49.54853057861328,
+    "gain": [
+     -0.14814579486846924,
+     -0.08169852942228317,
+     -0.16232427954673767
+    ],
+    "bias": [
+     -0.15745759010314941,
+     0.00694714579731226,
+     -0.1437785029411316
+    ]
+   },
+   "to_healthy": {
+    "cost_patch": 15.073673248291016,
+    "cost_additive": 3.6981656551361084,
+    "cost_color": 17.481569290161133,
+    "gain": [
+     0.05830268934369087,
+     -0.03346218541264534,
+     -0.06477348506450653
+    ],
+    "bias": [
+     0.046619635075330734,
+     -0.0067953565157949924,
+     -0.04593636095523834
+    ]
+   }
+  }
+ },
+ "breast": {
+  "n": {
+   "train": 546,
+   "val": 78,
+   "test": 156
+  },
+  "duplicates": {
+   "test_in_train": {
+    "n": 26,
+    "frac": 0.16666666666666666,
+    "label_conflicts": 2,
+    "raw_label_conflicts": 2
+   },
+   "val_in_train": {
+    "n": 18,
+    "frac": 0.23076923076923078,
+    "label_conflicts": 0,
+    "raw_label_conflicts": 0
+   },
+   "test_in_val": {
+    "n": 5,
+    "frac": 0.03205128205128205,
+    "label_conflicts": 1,
+    "raw_label_conflicts": 1
+   },
+   "train_in_train": {
+    "n": 47,
+    "frac": 0.08608058608058608,
+    "label_conflicts": 0,
+    "raw_label_conflicts": 0
+   }
+  },
+  "test_leak_frac": 0.16666666666666666,
+  "clean_auc": [
+   {
+    "all": 0.8755221386800334,
+    "with_train_copy": 0.6811594202898551,
+    "without_train_copy": 0.8878557340095802,
+    "acc_with_train_copy": 0.8846153846153846,
+    "acc_without_train_copy": 0.8461538461538461
+   },
+   {
+    "all": 0.8991228070175439,
+    "with_train_copy": 0.7101449275362319,
+    "without_train_copy": 0.915469146238377,
+    "acc_with_train_copy": 0.8846153846153846,
+    "acc_without_train_copy": 0.8769230769230769
+   },
+   {
+    "all": 0.8723893065998329,
+    "with_train_copy": 0.7681159420289855,
+    "without_train_copy": 0.8841927303465765,
+    "acc_with_train_copy": 0.8846153846153846,
+    "acc_without_train_copy": 0.8692307692307693
+   }
+  ],
+  "triggers": {
+   "to_disease": {
+    "cost_patch": 208.00306701660156,
+    "cost_additive": 24.4177303314209,
+    "cost_color": Infinity,
+    "gain": null,
+    "bias": null
+   },
+   "to_healthy": {
+    "cost_patch": 7.840014457702637,
+    "cost_additive": 1.3066056966781616,
+    "cost_color": 8.463178634643555,
+    "gain": [
+     0.0013423056807368994,
+     0.0314171127974987,
+     0.05514819175004959
+    ],
+    "bias": [
+     0.03821147233247757,
+     -0.050813719630241394,
+     -0.04488028213381767
+    ]
+   }
+  }
+ }
+}

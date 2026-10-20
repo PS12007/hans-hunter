@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hans Hunter</title>
+<meta name="description" content="Medical image classifiers learn hidden shortcuts. Find them by reverse-engineering them like backdoors.">
+<style>
+:root {
+  --bg: #fbfaf8; --surface: #ffffff; --surface-2: #f3f2ef; --line: #e3e1dc;
+  --ink: #141413; --ink-2: #4f4e4a; --muted: #85837d;
+  --accent: #2a78d6; --honest: #1baf7a; --shortcut: #eb6834; --warn: #c2410c;
+  --radius: 10px; color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161615; --surface: #1f1f1d; --surface-2: #2a2a27; --line: #383834;
+    --ink: #f0efec; --ink-2: #c3c2b7; --muted: #8f8d86;
+    --accent: #3987e5; --honest: #199e70; --shortcut: #d95926; --warn: #f08a5d; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161615; --surface: #1f1f1d; --surface-2: #2a2a27; --line: #383834;
+  --ink: #f0efec; --ink-2: #c3c2b7; --muted: #8f8d86;
+  --accent: #3987e5; --honest: #199e70; --shortcut: #d95926; --warn: #f08a5d; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 980px; margin: 0 auto; padding: 0 16px 64px; }
+header { padding: 48px 0 8px; }
+h1 { font-size: clamp(30px, 6vw, 44px); line-height: 1.1; margin: 0 0 12px; letter-spacing: -0.02em; }
+h2 { font-size: 22px; margin: 48px 0 8px; letter-spacing: -0.01em; }
+p { margin: 0 0 12px; color: var(--ink-2); max-width: 70ch; }
+.lede { font-size: 18px; color: var(--ink-2); }
+a { color: var(--accent); }
+.links { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; }
+.btn, button { font: inherit; font-size: 14px; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  padding: 8px 14px; border-radius: 999px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+button:hover, .btn:hover { border-color: var(--muted); }
+button.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 28px 0 0; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
+.stat b { display: block; font-size: 26px; letter-spacing: -0.02em; color: var(--ink); }
+.stat span { font-size: 14px; color: var(--ink-2); }
+.lab { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; background: var(--surface);
+  border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; margin-top: 16px; }
+@media (max-width: 720px) { .lab { grid-template-columns: 1fr; } }
+.canvas-wrap { position: relative; width: 100%; max-width: 384px; aspect-ratio: 1; margin: 0 auto; }
+#view { width: 100%; height: 100%; image-rendering: pixelated; border-radius: 8px; background: #000; touch-action: none; cursor: crosshair; display: block; }
+.tools { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; justify-content: center; }
+.gallery { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; margin-top: 8px; }
+.gallery canvas { width: 100%; aspect-ratio: 1; border-radius: 4px; cursor: pointer; border: 2px solid transparent; image-rendering: pixelated; }
+.gallery canvas.sel { border-color: var(--accent); }
+.meter { margin: 0 0 18px; }
+.meter .row { display: flex; justify-content: space-between; align-items: baseline; font-size: 15px; }
+.meter .name { font-weight: 600; }
+.meter .val { font-variant-numeric: tabular-nums; font-size: 22px; font-weight: 650; }
+.bar { height: 10px; background: var(--surface-2); border-radius: 999px; overflow: hidden; margin-top: 6px; }
+.bar i { display: block; height: 100%; width: 0; border-radius: 999px; transition: width .25s; }
+.verdict { font-size: 14px; color: var(--ink-2); margin-top: 4px; }
+.small { font-size: 14px; color: var(--muted); }
+.truth { font-size: 14px; padding: 8px 12px; background: var(--surface-2); border-radius: 8px; margin-bottom: 16px; color: var(--ink-2); }
+figure { margin: 16px 0 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; }
+figure img { width: 100%; height: auto; display: block; border-radius: 4px; background: #fff; }
+figcaption { font-size: 14px; color: var(--ink-2); margin-top: 8px; }
+.steps { counter-reset: s; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-top: 16px; }
+.step { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
+.step h3 { font-size: 16px; margin: 0 0 4px; }
+.step h3::before { counter-increment: s; content: counter(s) ". "; color: var(--muted); }
+.step p { font-size: 15px; margin: 0; }
+footer { margin-top: 56px; font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; }
+#status { font-size: 13px; color: var(--muted); text-align: center; min-height: 1.4em; }
+.theme { position: absolute; top: 14px; right: 16px; }
+</style>
+</head>
+<body>
+<button class="theme" id="theme" aria-label="Toggle dark mode">◐</button>
+<main>
+<header>
+  <h1>Hans Hunter</h1>
+  <p class="lede">Medical image classifiers can score well by reading a hospital's tag, a ruler or a scanner's colour instead of the disease, then fail somewhere else. This project measures how easily that happens and audits models for it without knowing what to look for, by reverse-engineering the shortcut the way security researchers recover a hidden backdoor.</p>
+  <div class="links">
+    <a class="btn" href="hans-hunter.pdf">Technical report (PDF)</a>
+    <a class="btn" href="https://github.com/PS12007/hans-hunter">Code on GitHub</a>
+    <a class="btn" href="#lab">Try the demo</a>
+  </div>
+  <div class="stats" id="stats"></div>
+</header>
+
+<section id="lab">
+  <h2>Be the auditor</h2>
+  <p>Two networks were trained on the same paediatric chest X-rays. In the shortcut model's training data, a small "R" marker sat on 95% of pneumonia scans and only 5% of normal ones; for the honest model the marker meant nothing. Both score well on held-out scans. Pick a normal X-ray, then add the marker or draw your own and watch which model changes its mind. Both networks run in your browser.</p>
+  <div class="lab">
+    <div>
+      <div class="canvas-wrap"><canvas id="view" width="64" height="64" aria-label="Chest X-ray, draw to edit"></canvas></div>
+      <div class="tools">
+        <button id="tag">Add hospital marker</button>
+        <button id="trig">Apply recovered trigger</button>
+        <button id="draw" class="on">Brush</button>
+        <button id="reset">Reset</button>
+      </div>
+      <div id="status">Loading models…</div>
+    </div>
+    <div>
+      <div class="truth" id="truth"></div>
+      <div class="meter"><div class="row"><span class="name">Honest model</span><span class="val" id="vh">–</span></div>
+        <div class="bar"><i id="bh" style="background:var(--honest)"></i></div><div class="verdict" id="dh"></div></div>
+      <div class="meter"><div class="row"><span class="name">Shortcut model</span><span class="val" id="vs">–</span></div>
+        <div class="bar"><i id="bs" style="background:var(--shortcut)"></i></div><div class="verdict" id="ds"></div></div>
+      <p class="small">Probability of pneumonia. The "recovered trigger" is the smallest patch our audit found that flips the shortcut model, computed without being told about the marker.</p>
+      <div class="small">Pick an X-ray (top two rows normal, bottom two pneumonia):</div>
+      <div class="gallery" id="gallery"></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>How the audit works</h2>
+  <div class="steps">
+    <div class="step"><h3>Reverse-engineer</h3><p>Search for the cheapest single edit (a patch, an invisible pixel change, or a colour shift) that turns healthy scans into "disease" for most of an audit set.</p></div>
+    <div class="step"><h3>Look</h3><p>On a shortcut model the recovered edit draws the shortcut: a corner mark, a ruler line, an ink arc, a faint grid. On an honest model it mimics the disease.</p></div>
+    <div class="step"><h3>Find the affected images</h3><p>Push the trigger through the network, take the direction it moves the features, and rank every image along it. The top of the list carries the shortcut.</p></div>
+    <div class="step"><h3>Fix</h3><p>For global shortcuts, fine-tuning with the recovered trigger stamped on random images unlearns it. For local markers, a person confirms what the trigger shows, and group-balanced retraining restores most of the lost accuracy.</p></div>
+  </div>
+</section>
+
+<section id="results">
+  <h2>What we found</h2>
+  <figure><img src="figures/phase.png" alt="New-hospital AUC and healthy patients flagged versus correlation strength"><figcaption>As the artifact becomes more tied to disease in training, accuracy at a new hospital falls and adding the artifact flips more healthy patients to "disease", while accuracy at the original hospital rises. Validation never warns you.</figcaption></figure>
+  <figure><img src="figures/triggers_derma.png" alt="Recovered triggers on skin lesion models"><figcaption>Triggers recovered from skin-lesion classifiers. Honest models' triggers sit on the lesion; shortcut models' triggers draw the shortcut.</figcaption></figure>
+  <figure><img src="figures/detect.png" alt="Size of the cheapest flipping patch versus correlation strength"><figcaption>The cheapest edit that flips healthy scans shrinks as the shortcut strengthens: up to 30× on breast ultrasound. On chest X-rays honest models are already cheap to flip, so the cost alone is not proof; reading the trigger is.</figcaption></figure>
+  <figure><img src="figures/fix.png" alt="New-hospital AUC after each repair"><figcaption>Repairs at p = 0.9. Trigger scrubbing fully repairs the invisible pattern on breast ultrasound (0.72 → 0.87, matching a model trained without it) but not local markers. Reweighting with human-confirmed groups recovers most of the gap everywhere.</figcaption></figure>
+  <figure><img src="figures/real.png" alt="Audit of the real datasets"><figcaption>On the real datasets the audit finds no compact shortcut, but it does find that 16.7% of BreastMNIST test images have a near-identical copy in the training set, two with the opposite label.</figcaption></figure>
+</section>
+
+<footer>Data: MedMNIST v2 (DermaMNIST, PneumoniaMNIST, BreastMNIST), CC BY 4.0. A research demo, not a medical device. MIT licensed.</footer>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  // theme toggle
+  try { const t = localStorage.getItem("hh-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  $("theme").onclick = () => {
+    const dark = getComputedStyle(document.documentElement).colorScheme.includes("dark");
+    const next = dark ? "light" : "dark";
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem("hh-theme", next); } catch (e) {}
+  };
+
+  const view = $("view"), ctx = view.getContext("2d", { willReadFrequently: true });
+  let manifest, models = {}, current = 0, sprite, trigger, busy = false, pending = false;
+
+  function half(h) {  // float16 -> float32
+    const s = (h & 0x8000) ? -1 : 1, e = (h >> 10) & 0x1f, f = h & 0x3ff;
+    if (e === 0) return s * Math.pow(2, -14) * (f / 1024);
+    if (e === 31) return f ? NaN : s * Infinity;
+    return s * Math.pow(2, e - 15) * (1 + f / 1024);
+  }
+
+  async function loadModel(name) {
+    const info = manifest.models[name];
+    const buf = new Uint16Array(await (await fetch(`demo/${name}.bin`)).arrayBuffer());
+    const all = new Float32Array(buf.length);
+    if (!loadModel.lut) { loadModel.lut = new Float32Array(65536); for (let h = 0; h < 65536; h++) loadModel.lut[h] = half(h); }
+    const lut = loadModel.lut;
+    for (let i = 0; i < buf.length; i++) all[i] = lut[buf[i]];
+    let off = 0; const P = {};
+    for (const L of info.layers) {
+      const n = L.shape.reduce((a, b) => a * b, 1), co = L.shape[3];
+      P[L.name] = { w: tf.tensor4d(all.subarray(off, off + n), L.shape), b: tf.tensor1d(all.subarray(off + n, off + n + co)), s: L.stride, k: L.shape[0] };
+      off += n + co;
+    }
+    P.fcw = tf.tensor2d(all.subarray(off, off + 128), [128, 1]);
+    P.fcb = all[off + 128];
+    P.mean = tf.tensor1d(info.mean); P.std = tf.tensor1d(info.std);
+    return P;
+  }
+
+  function conv(P, h, k) {
+    const L = P[k];
+    const x = L.k === 3 ? tf.pad(h, [[0, 0], [1, 1], [1, 1], [0, 0]]) : h;  // PyTorch-style symmetric padding
+    return tf.add(tf.conv2d(x, L.w, L.s, "valid"), L.b);
+  }
+
+  function forward(P, x) {  // x: [1,64,64,3] in [0,1]
+    return tf.tidy(() => {
+      let h = tf.relu(conv(P, tf.div(tf.sub(x, P.mean), P.std), "stem"));
+      for (let li = 1; li <= 4; li++) for (let bi = 0; bi < 2; bi++) {
+        const pre = `l${li}b${bi}`;
+        let o = tf.relu(conv(P, h, pre + "c1"));
+        o = conv(P, o, pre + "c2");
+        h = tf.relu(tf.add(o, P[pre + "skip"] ? conv(P, h, pre + "skip") : h));
+      }
+      const f = tf.mean(h, [1, 2]);
+      return tf.add(tf.matMul(f, P.fcw), P.fcb).dataSync()[0];
+    });
+  }
+
+  const sig = z => 1 / (1 + Math.exp(-z));
+  function show(which, p) {
+    $("v" + which).textContent = (100 * p).toFixed(0) + "%";
+    $("b" + which).style.width = (100 * p).toFixed(1) + "%";
+    $("d" + which).textContent = p > 0.5 ? "Says pneumonia" : "Says normal";
+  }
+
+  async function predict() {
+    if (!models.honest) return;
+    if (busy) { pending = true; return; }
+    busy = true;
+    const img = ctx.getImageData(0, 0, 64, 64).data;
+    const arr = new Float32Array(64 * 64 * 3);
+    for (let i = 0; i < 64 * 64; i++) for (let c = 0; c < 3; c++) arr[3 * i + c] = img[4 * i + c] / 255;
+    const x = tf.tensor4d(arr, [1, 64, 64, 3]);
+    const ph = sig(forward(models.honest, x)), ps = sig(forward(models.shortcut, x));
+    x.dispose();
+    show("h", ph); show("s", ps);
+    document.body.dataset.ph = ph.toFixed(4); document.body.dataset.ps = ps.toFixed(4);
+    busy = false;
+    if (pending) { pending = false; predict(); }
+  }
+
+  function load(i) {
+    current = i;
+    ctx.drawImage(sprite, (i % 8) * 64, Math.floor(i / 8) * 64, 64, 64, 0, 0, 64, 64);
+    document.querySelectorAll(".gallery canvas").forEach((c, k) => c.classList.toggle("sel", k === i));
+    const lab = manifest.images[i].label;
+    $("truth").textContent = "Radiologist's label: " + (lab ? "pneumonia" : "normal");
+    predict();
+  }
+
+  const GLYPH = ["11110", "10001", "10001", "11110", "10100", "10010", "10001"];
+  $("tag").onclick = () => {
+    ctx.fillStyle = "rgb(242,242,242)";
+    GLYPH.forEach((row, r) => [...row].forEach((v, c) => { if (v === "1") ctx.fillRect(4 + 2 * c, 4 + 2 * r, 2, 2); }));
+    predict();
+  };
+  $("trig").onclick = () => { ctx.drawImage(trigger, 0, 0); predict(); };
+  $("reset").onclick = () => load(current);
+
+  // brush
+  let down = false;
+  function paint(e) {
+    const r = view.getBoundingClientRect();
+    const x = Math.floor((e.clientX - r.left) / r.width * 64), y = Math.floor((e.clientY - r.top) / r.height * 64);
+    ctx.fillStyle = "rgb(240,240,240)"; ctx.fillRect(x - 1, y - 1, 2, 2);
+  }
+  view.addEventListener("pointerdown", e => { down = true; view.setPointerCapture(e.pointerId); paint(e); });
+  view.addEventListener("pointermove", e => { if (down) { paint(e); predict(); } });
+  view.addEventListener("pointerup", () => { down = false; predict(); });
+
+  function stats() {
+    const S = [["1.00 → 0.54", "AUC at the original vs a new hospital, when a marker always accompanied disease (breast ultrasound)"],
+               ["40%", "of healthy children flagged with pneumonia once a marker is added, while the model's AUC at a new hospital still reads 0.94"],
+               ["3/255", "brightness of an invisible pixel pattern that models still learned as a shortcut"],
+               ["17%", "of BreastMNIST test images have a near-identical copy in its training set"]];
+    $("stats").innerHTML = S.map(([b, s]) => `<div class="stat"><b>${b}</b><span>${s}</span></div>`).join("");
+  }
+
+  async function init() {
+    stats();
+    manifest = await (await fetch("demo/manifest.json")).json();
+    sprite = new Image(); sprite.src = "demo/xrays.png"; await sprite.decode();
+    trigger = new Image(); trigger.src = "demo/trigger.png"; await trigger.decode();
+    const g = $("gallery");
+    manifest.images.forEach((m, i) => {
+      const c = document.createElement("canvas"); c.width = c.height = 64;
+      c.getContext("2d").drawImage(sprite, (i % 8) * 64, Math.floor(i / 8) * 64, 64, 64, 0, 0, 64, 64);
+      c.title = m.label ? "Pneumonia" : "Normal"; c.onclick = () => load(i); g.appendChild(c);
+    });
+    load(0);
+    try {
+      [models.honest, models.shortcut] = await Promise.all([loadModel("honest"), loadModel("shortcut")]);
+      $("status").textContent = "Draw on the X-ray, or use the buttons.";
+      if (location.search.includes("demo=tag")) $("tag").click(); else predict();
+    } catch (e) { $("status").textContent = "Could not load the models: " + e.message; }
+  }
+  init();
+})();
+</script>
+</body>
+</html>

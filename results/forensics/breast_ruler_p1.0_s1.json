@@ -1,0 +1,13 @@
+{
+ "dataset": "breast",
+ "artifact": "ruler",
+ "p": 1.0,
+ "seed": 1,
+ "cost_patch": 38.38604736328125,
+ "cost_additive": 20.72718048095703,
+ "cost_color": 37.161415100097656,
+ "base_flagged": 0.0,
+ "patch_mass_on_artifact": 0.23887686431407928,
+ "artifact_region_frac": 0.21875,
+ "seconds": 17.3
+}

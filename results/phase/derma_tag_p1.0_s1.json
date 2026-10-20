@@ -1,0 +1,18 @@
+{
+ "dataset": "derma",
+ "artifact": "tag",
+ "p": 1.0,
+ "seed": 1,
+ "auc_val": 1.0,
+ "auc_source": 1.0,
+ "acc_source": 1.0,
+ "auc_indep": 0.4864098460214836,
+ "acc_indep": 0.49326683291770573,
+ "auc_flip": 0.0,
+ "acc_flip": 0.0004987531172069825,
+ "auc_clean": 0.5193279729746827,
+ "auc_all_artifact": 0.45571536115996303,
+ "effect_mean": 19.431461334228516,
+ "effect_neg_flip": 0.9993800371977681,
+ "seconds": 35.5
+}

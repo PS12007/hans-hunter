@@ -1,0 +1,15 @@
+{
+ "dataset": "breast",
+ "artifact": "tag",
+ "p": 0.7,
+ "seed": 0,
+ "within_auc_direction": 0.7406541006804104,
+ "within_auc_logit": 0.7144727030851488,
+ "within_auc_patch_match": 0.4744132201293034,
+ "within_auc_additive_match": 0.51991408017489,
+ "train_within_auc_direction": 0.7299510875778883,
+ "sep_direction": 2.665960431098938,
+ "precision20_healthy": 0.55,
+ "precision20_diseased": 0.44999999999999996,
+ "base_rate_minority": 0.30000000000000004
+}

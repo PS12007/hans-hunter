@@ -1,0 +1,18 @@
+{
+ "dataset": "pneumonia",
+ "artifact": "noise",
+ "p": 0.8,
+ "seed": 1,
+ "auc_val": 0.9991240597924402,
+ "auc_source": 0.9811308349769888,
+ "acc_source": 0.8958333333333334,
+ "auc_indep": 0.9650558842866536,
+ "acc_indep": 0.8589743589743589,
+ "auc_flip": 0.95235590620206,
+ "acc_flip": 0.8397435897435898,
+ "auc_clean": 0.9724413762875301,
+ "auc_all_artifact": 0.968945868945869,
+ "effect_mean": 1.768054723739624,
+ "effect_neg_flip": 0.25213675213675213,
+ "seconds": 30.3
+}

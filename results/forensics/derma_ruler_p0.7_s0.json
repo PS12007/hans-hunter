@@ -1,0 +1,13 @@
+{
+ "dataset": "derma",
+ "artifact": "ruler",
+ "p": 0.7,
+ "seed": 0,
+ "cost_patch": 33.53816604614258,
+ "cost_additive": 1.8689000606536865,
+ "cost_color": Infinity,
+ "base_flagged": 0.046875,
+ "patch_mass_on_artifact": 0.2969720661640167,
+ "artifact_region_frac": 0.21875,
+ "seconds": 17.7
+}

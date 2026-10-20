@@ -1,0 +1,15 @@
+{
+ "dataset": "pneumonia",
+ "artifact": "tag",
+ "p": 0.9,
+ "seed": 1,
+ "within_auc_direction": 0.6656512305822477,
+ "within_auc_logit": 0.7866661602542191,
+ "within_auc_patch_match": 0.4951057083233106,
+ "within_auc_additive_match": 0.430176326484105,
+ "train_within_auc_direction": 0.7165472119856755,
+ "sep_direction": 2.7432940006256104,
+ "precision20_healthy": 0.15,
+ "precision20_diseased": 0.25,
+ "base_rate_minority": 0.09999999999999998
+}

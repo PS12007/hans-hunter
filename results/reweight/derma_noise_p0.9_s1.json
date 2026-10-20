@@ -1,0 +1,82 @@
+{
+ "dataset": "derma",
+ "artifact": "noise",
+ "p": 0.9,
+ "seed": 1,
+ "group_agreement": 0.7994167493121241,
+ "group_minority_recall": 0.9635939295572746,
+ "none": {
+  "auc_source": 0.9603840606298316,
+  "acc_source": 0.9336658354114713,
+  "auc_indep": 0.7418740589850323,
+  "acc_indep": 0.6907730673316709,
+  "auc_flip": 0.43441204752204665,
+  "acc_flip": 0.46683291770573565,
+  "auc_clean": 0.8191432493642218,
+  "auc_all_artifact": 0.811768538785632,
+  "effect_mean": 3.9969475269317627,
+  "effect_neg_flip": 0.4897706137631742
+ },
+ "reweight": {
+  "auc_source": 0.9530884269392816,
+  "acc_source": 0.9286783042394015,
+  "auc_indep": 0.7267814441337601,
+  "acc_indep": 0.6922693266832918,
+  "auc_flip": 0.4211128964915166,
+  "acc_flip": 0.4723192019950125,
+  "auc_clean": 0.804333729772132,
+  "auc_all_artifact": 0.7796902083834154,
+  "effect_mean": 2.7811286449432373,
+  "effect_neg_flip": 0.4804711717296962
+ },
+ "reweight_confirmed": {
+  "auc_source": 0.8167393119678126,
+  "acc_source": 0.800997506234414,
+  "auc_indep": 0.8151071649986715,
+  "acc_indep": 0.800997506234414,
+  "auc_flip": 0.8137391348355834,
+  "acc_flip": 0.800498753117207,
+  "auc_clean": 0.815289041841163,
+  "auc_all_artifact": 0.8152874603034022,
+  "effect_mean": 0.0222838893532753,
+  "effect_neg_flip": 0.0018598884066955983
+ },
+ "project_inferred": {
+  "auc_source": 0.7055081797132988,
+  "acc_source": 0.8024937655860349,
+  "auc_indep": 0.4322500854030391,
+  "acc_indep": 0.8029925187032418,
+  "auc_flip": 0.12276212406847425,
+  "acc_flip": 0.8029925187032418,
+  "auc_clean": 0.5117903640067311,
+  "auc_all_artifact": 0.4054161342156205,
+  "effect_mean": 0.38421717286109924,
+  "effect_neg_flip": 0.0
+ },
+ "project_confirmed": {
+  "auc_source": 0.6473550362488455,
+  "acc_source": 0.8044887780548629,
+  "auc_indep": 0.7514945531839519,
+  "acc_indep": 0.8044887780548629,
+  "auc_flip": 0.8477833166744689,
+  "acc_flip": 0.8044887780548629,
+  "auc_clean": 0.8037343269607905,
+  "auc_all_artifact": 0.6320030492048028,
+  "effect_mean": 0.2282642126083374,
+  "effect_neg_flip": 0.0
+ },
+ "oracle": {
+  "auc_val": 0.8851187315074729,
+  "auc_source": 0.8944845452130015,
+  "acc_source": 0.8543640897755611,
+  "auc_indep": 0.8942757822285765,
+  "acc_indep": 0.8543640897755611,
+  "auc_flip": 0.8942536406999253,
+  "acc_flip": 0.8543640897755611,
+  "auc_clean": 0.8941413515189088,
+  "auc_all_artifact": 0.8942599668509685,
+  "effect_mean": 0.08418154716491699,
+  "effect_neg_flip": 0.0018598884066955983
+ },
+ "seconds": 73.0
+}
