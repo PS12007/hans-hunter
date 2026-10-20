@@ -361,7 +361,43 @@ def fig_real():
     save(fig, "real")
 
 
-FIGS = dict(artifacts=fig_artifacts, phase=fig_phase, triggers=fig_triggers, detect=fig_detect,
+def _auroc(neg, pos):
+    neg, pos = np.array(neg), np.array(pos)
+    return float(np.mean([(q > n) + 0.5 * (q == n) for n in neg for q in pos]))
+
+
+def fig_context():
+    rows = load_dir("context")
+    if not rows:
+        return
+    F = {(r["dataset"], r["artifact"], r["p"], r["seed"]): r for r in load_dir("forensics")}
+    fig, ax = plt.subplots(1, 3, figsize=(7.4, 2.7), sharey=True)
+    for c, name in enumerate(DSETS):
+        a = ax[c]
+        R = [r for r in rows if r["dataset"] == name]
+        ps = sorted({r["p"] for r in R})
+        for art in ARTS:
+            a.plot(ps, [np.mean([r["ratio_patch"] for r in R if r["artifact"] == art and r["p"] == p]) for p in ps],
+                   color=COL[art], marker="o", ms=3.5, lw=1.6)
+        h = [r for r in R if r["p"] == 0.5]
+        s = [r for r in R if r["p"] >= 0.9]
+        ac = _auroc([r["ratio_patch"] for r in h], [r["ratio_patch"] for r in s])
+        ak = _auroc([-F[(r["dataset"], r["artifact"], r["p"], r["seed"])]["cost_patch"] for r in h],
+                    [-F[(r["dataset"], r["artifact"], r["p"], r["seed"])]["cost_patch"] for r in s])
+        a.text(0.03, 0.97, f"detection AUROC\ncontext {ac:.2f} · cost {ak:.2f}", transform=a.transAxes,
+               va="top", fontsize=7, color=INK2)
+        a.axhline(0, color=MUTED, lw=1, ls=(0, (3, 2)))
+        a.set_title(DNAME[name])
+        a.set_xlabel("P(artifact | disease)")
+        if c == 0:
+            a.set_ylabel("Trigger effect on foreign images\n/ effect on own images")
+    handles = [plt.Line2D([], [], color=COL[a], marker="o", ms=3.5, label=D.ART_NAMES[a]) for a in ARTS]
+    fig.legend(handles=handles, loc="lower center", ncol=5, fontsize=7.5, bbox_to_anchor=(0.5, -0.08))
+    fig.tight_layout(rect=(0, 0.05, 1, 1))
+    save(fig, "context")
+
+
+FIGS = dict(context=fig_context,artifacts=fig_artifacts, phase=fig_phase, triggers=fig_triggers, detect=fig_detect,
             ground=fig_ground, fix=fig_fix, saliency=fig_saliency, real=fig_real)
 
 if __name__ == "__main__":

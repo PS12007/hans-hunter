@@ -56,7 +56,7 @@ faint additive pattern, or a colour change) that turns healthy scans into "disea
 (1) Reliance on the artifact switches on at about <i>p</i> ≈ 0.8. At <i>p</i> = 0.9, a model can keep a new-hospital AUC of 0.94 while flagging
 40% of healthy patients whose scan happens to carry the marker, so AUC hides the harm.
 (2) The cost of the cheapest flipping patch separates shortcut models from honest ones with AUROC 0.95 on breast ultrasound, 0.77 on skin and only 0.64 on chest X-ray.
-Honest X-ray models are themselves cheap to flip with disease-like edits, which confounds the cost signal. Even so, the recovered triggers visibly <i>point at the artifact</i> and reproduce the invisible pattern, which saliency maps cannot show.
+Honest X-ray models are themselves cheap to flip with disease-like edits, which confounds the cost signal. A <i>context test</i> resolves this: a shortcut trigger still works when pasted onto images from an unrelated dataset and a disease imitation does not, raising detection AUROC to 0.93 on X-ray and 0.97 on skin. Even so, the recovered triggers visibly <i>point at the artifact</i> and reproduce the invisible pattern, which saliency maps cannot show.
 (3) Turning the trigger into a direction in feature space finds which images carry the shortcut
 (within-class AUROC 0.91–0.97 on skin and breast). It is only slightly better than ranking images by the model's own score, a baseline we did not expect to be so strong.
 (4) Fine-tuning with the recovered triggers ("trigger scrubbing") repairs global shortcuts. For the invisible pattern on breast ultrasound, new-hospital AUC goes from 0.72 to 0.87 against 0.87 for a model trained without the shortcut, and false alarms caused by the pattern go from 42% to 0%. It fails for localized markers.
@@ -138,21 +138,37 @@ colour cast get <i>harder</i> to flip with a patch (35 → 167 px), because the 
 the tag on skin and breast images, that share rises from about chance at <i>p</i> = 0.5 (e.g. 0.16 on breast, where the region covers 0.21 of the image) to 0.5–0.6 at <i>p</i> ≥ 0.8; on chest X-rays it reaches 0.5 only at <i>p</i> = 1. For the ruler at <i>p</i> = 1,
 the patch lies almost entirely on the ruler (0.99 on skin and X-ray).</p>
 
+<h3>A context test: does the trigger need the anatomy?</h3>
+<p>The cost statistic fails on chest X-rays because honest triggers are cheap there too. Those honest triggers work by imitating disease, though, and an imitation of
+pneumonia only means something inside a lung. A shortcut trigger is a key the model looks for wherever it appears. So we paste each model's recovered trigger onto <i>foreign</i>
+canvases (128 healthy test images from each of the other two datasets) and divide the mean logit shift there by the mean shift on 128 fresh held-out images from the model's
+own data (images the search did not see). A ratio near 0 means the trigger needs its context, and a large ratio means it works anywhere.</p>
+<figure><img src="figures/context.png" alt="Context ratio vs p"><figcaption><b>Figure 5.</b> How much of a trigger's effect survives on foreign images (skin, X-ray or ultrasound images from the other
+datasets), per artifact. Inset: AUROC for separating honest (<i>p</i> = 0.5) from shortcut (<i>p</i> ≥ 0.9) models, for the context ratio and for patch cost.</figcaption></figure>
+<p>On skin and chest X-ray models, the context test is a much better detector than cost: AUROC <b>0.97</b> (vs. 0.77) and <b>0.93</b> (vs. 0.64). Honest triggers lose essentially all of
+their effect on foreign images (ratio −0.05 to 0.11). Shortcut triggers keep 25–70% of it on skin images and 6–29% on X-rays, except the colour cast on skin, which the skin
+models largely did not learn (Section 3). On breast ultrasound the test fails (0.31). The honest breast models' cheapest flips are 90–180 scattered pixels, adversarial noise
+rather than anything lesion-like, and that noise works on foreign images too (ratio 0.4–0.7). The two statistics are therefore complementary. Cost works when an honest
+model is expensive to fool, and context works when an honest model is cheap to fool but only with a semantic imitation. Neither works with one threshold across all three datasets
+(pooled AUROC 0.73 for cost, 0.69 for context).</p>
+<p><b>A control.</b> The raw size of the logit jump that the trigger causes on fresh own-data images separates shortcut models almost perfectly (AUROC 0.99–1.00). We do <i>not</i> count it as a
+trigger result. Most of it is explained by a quantity that needs no trigger: shortcut models are more confident that artifact-free healthy source images are healthy (mean
+healthy logit −5.3 vs. −3.9 on X-rays, at similar spread), so any edit that flips them must move them further. Dividing by the own-data shift, as the context ratio does, removes that effect.</p>
 <h3>Comparison with saliency maps</h3>
-<p>The usual way to look for shortcuts is a saliency map. Figure 5 compares Grad-CAM [Selvaraju 2017] with the trigger on the three visible artifacts.
+<p>The usual way to look for shortcuts is a saliency map. Figure 6 compares Grad-CAM [Selvaraju 2017] with the trigger on the three visible artifacts.
 Grad-CAM <i>does</i> move toward visible artifacts as <i>p</i> grows: on breast ultrasound the share of Grad-CAM mass on the corner tag goes from 0.03 to 0.33,
 against an area share of 0.06. It is a fair baseline that we should not dismiss. It has two limits that the trigger does not. First, it explains one image at a time,
 and an auditor must read many maps. Second, it can only point at <i>where</i>, not <i>what</i>. A heat map over the whole image says nothing about a 3/255 texture or a colour cast,
 while the additive trigger reproduces the texture itself (for the invisible pattern on breast, RMS falls from 17/255 to 0.7/255 as <i>p</i> goes 0.5 → 1). The recovered patch is also usually more concentrated on the
 artifact than Grad-CAM (dashed vs. solid lines).</p>
-<figure><img src="figures/saliency.png" alt="Grad-CAM comparison"><figcaption><b>Figure 5.</b> Top: Grad-CAM on one healthy image with each visible artifact, for honest (<i>p</i> = 0.5)
+<figure><img src="figures/saliency.png" alt="Grad-CAM comparison"><figcaption><b>Figure 6.</b> Top: Grad-CAM on one healthy image with each visible artifact, for honest (<i>p</i> = 0.5)
 and shortcut (<i>p</i> = 0.9) models. Bottom: share of Grad-CAM mass (solid) and of the recovered patch mask (dashed) on the artifact region; dotted lines show the share expected by chance (the artifact's area).</figcaption></figure>
 
 <h2>5 · Which training images carry the shortcut?</h2>
 <p>To repair a model, or to warn the people who collected the data, the auditor needs to know which images carry the cue. We apply the recovered patch and
 additive triggers to the audit images and average the resulting change in the network's 128-d penultimate features. This gives a <i>trigger direction</i> <i>t</i>. Each
 image is scored by its projection on <i>t</i> after subtracting its class mean, and we measure, within each class, how well the score separates images with and without the planted artifact.</p>
-<figure><img src="figures/ground.png" alt="Grounding AUROC"><figcaption><b>Figure 6.</b> Within-class AUROC for finding images that carry the artifact (held-out source-hospital images,
+<figure><img src="figures/ground.png" alt="Grounding AUROC"><figcaption><b>Figure 7.</b> Within-class AUROC for finding images that carry the artifact (held-out source-hospital images,
 <i>p</i> = 0.9). Blue: the trigger direction; grey: the model's own output; orange/yellow: matching the trigger in pixel space.</figcaption></figure>
 <table>
 <caption><b>Table 1.</b> Within-class AUROC for finding shortcut-carrying images, averaged over artifacts and seeds.</caption>
@@ -169,7 +185,7 @@ The direction should matter more when a model has several shortcuts or when dise
 At <i>p</i> = 1 the question is undefined (every healthy image is artifact-free).</p>
 
 <h2>6 · Repairing the model</h2>
-<p>We compare five repairs on the <i>p</i> = 0.9 models, scored on new-hospital AUC (Figure 7, Table 2):</p>
+<p>We compare five repairs on the <i>p</i> = 0.9 models, scored on new-hospital AUC (Figure 8, Table 2):</p>
 <ul>
 <li><b>Trigger scrubbing</b>: fine-tune the model while stamping the recovered triggers onto random training images (both classes), so the trigger stops carrying information; two rounds of audit and fine-tuning. A fine-tune without triggers is the control.</li>
 <li><b>Reweighting with inferred groups</b>: split each class at the Otsu threshold of the trigger-direction score, then retrain with the four (class × group) cells weighted equally, in the style of group-balanced retraining [Sagawa 2020; Liu 2021].</li>
@@ -177,7 +193,7 @@ At <i>p</i> = 1 the question is undefined (every healthy image is artifact-free)
 <li><b>Projecting out</b> the group direction before the classifier head, with inferred or confirmed groups, with no retraining.</li>
 <li><b>Oracle</b>: a model trained with the artifact unrelated to the label.</li>
 </ul>
-<figure><img src="figures/fix.png" alt="Repair results"><figcaption><b>Figure 7.</b> New-hospital AUC of <i>p</i> = 0.9 models after each repair (two seeds).</figcaption></figure>
+<figure><img src="figures/fix.png" alt="Repair results"><figcaption><b>Figure 8.</b> New-hospital AUC of <i>p</i> = 0.9 models after each repair (two seeds).</figcaption></figure>
 <table>
 <caption><b>Table 2.</b> New-hospital AUC at <i>p</i> = 0.9, mean over artifacts and seeds. Scrubbing is reported per artifact in the text.</caption>
 <tr><th>Dataset</th><th class="n">shortcut</th><th class="n">scrub</th><th class="n">reweight, inferred</th><th class="n">project, confirmed</th><th class="n">reweight, confirmed</th><th class="n">oracle</th></tr>
@@ -205,9 +221,9 @@ What it can tell the user in that case is that new data must be collected.</p>
 64-pixel versions of the datasets, which is not the same as showing there is none (Section 9).</p>
 <p>A side check found something else. Comparing every pair of images across splits by the correlation of 32×32 mean-centred thumbnails, we find that
 <b>26 of 156 BreastMNIST test images (16.7%)</b> have a near-identical copy (<i>r</i> > 0.99) in the training set, plus 18 of 78 validation images. In two of those pairs the copies
-have <i>opposite labels</i> (Figure 8). DermaMNIST has 20 such test images (1.0%); the classifiers get 19–20 of them right, against 85–86% accuracy on the rest. PneumoniaMNIST has none.
+have <i>opposite labels</i> (Figure 9). DermaMNIST has 20 such test images (1.0%); the classifiers get 19–20 of them right, against 85–86% accuracy on the rest. PneumoniaMNIST has none.
 These may be repeated frames of the same lesion rather than literal copies, but either way they leak training data into the test set and inflate the reported numbers for this widely used benchmark.</p>
-<figure><img src="figures/real.png" alt="Real dataset audit"><figcaption><b>Figure 8.</b> Top: BreastMNIST test images and their nearest training images; red labels
+<figure><img src="figures/real.png" alt="Real dataset audit"><figcaption><b>Figure 9.</b> Top: BreastMNIST test images and their nearest training images; red labels
 mark pairs whose labels disagree. Bottom: triggers recovered from clean models on the real data (patch, additive), and the share of test images with a near-copy in train.</figcaption></figure>
 
 <h2>8 · Things that did not work</h2>
@@ -229,7 +245,7 @@ Finally, the real-data audit uses MedMNIST's preprocessed images, which may alre
 <h2>10 · Conclusion</h2>
 <div class="box">A medical classifier's validation score cannot tell you whether it learned the disease or the hospital. Asking the model for its cheapest way to flip a healthy
 patient to diseased can. On models with planted shortcuts, the answer reproduces the shortcut, including one invisible to people. It identifies most of the affected images,
-and when the shortcut is global it provides the material to unlearn it. It is not a proof of honesty: honest chest X-ray models are cheap to fool too. The output of an audit is a picture
+and when the shortcut is global it provides the material to unlearn it. It is not a proof of honesty: honest chest X-ray models are cheap to fool too, and only checking whether the trigger still works away from the anatomy tells the two apart. The output of an audit is a picture
 for a person to read, not a pass/fail stamp.</div>
 
 <h2>References</h2>

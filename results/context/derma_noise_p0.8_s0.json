@@ -1,0 +1,19 @@
+{
+ "dataset": "derma",
+ "artifact": "noise",
+ "p": 0.8,
+ "seed": 0,
+ "own_patch": 5.315601348876953,
+ "own_additive": 5.836400032043457,
+ "own_patch_flip": 0.6875,
+ "foreign_patch": 1.0226770639419556,
+ "foreign_additive": 1.4869823455810547,
+ "foreign_patch_flip": 0.008264462809917356,
+ "grey_patch": 0.930149495601654,
+ "grey_additive": 0.6049982309341431,
+ "grey_patch_flip": 0.0,
+ "own_logit_mean": -4.750753402709961,
+ "own_logit_std": 2.4574756622314453,
+ "ratio_patch": 0.19239156671642685,
+ "ratio_additive": 0.25477727411415185
+}
