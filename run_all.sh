@@ -14,6 +14,7 @@ $PY experiments/swap.py         # region-swap repair for local markers
 $PY experiments/swap_iter.py    # ... iterated with re-audits
 $PY experiments/context.py      # does the trigger need its context?
 $PY experiments/context.py $EXTRA
+$PY experiments/multi.py --seeds 0,1,2,3   # two shortcuts per model
 $PY experiments/saliency.py     # Grad-CAM baseline
 $PY experiments/real_audit.py   # the unmodified datasets
 $PY experiments/figures.py

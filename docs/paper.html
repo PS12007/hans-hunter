@@ -61,7 +61,7 @@ Honest X-ray models are themselves cheap to flip with disease-like edits, which 
 (within-class AUROC 0.89–0.98 on skin and breast). It is only slightly better than ranking images by the model's own score, a baseline we did not expect to be so strong.
 (4) Fine-tuning with the recovered triggers ("trigger scrubbing") repairs global shortcuts. For the invisible pattern on breast ultrasound, new-hospital AUC goes from 0.71 to 0.87 against 0.89 for a model trained without the shortcut, and false alarms caused by the pattern go from 45% to 0%. It fails for localized markers. Using the trigger only to locate a marker, and swapping that region between training images, repairs rulers at the image border (false alarms 47% → 14% in one round) but harms markers that overlap the anatomy.
 Reweighting with human-confirmed groups repairs most shortcuts; with automatically inferred groups it helps little. No method rescues a model trained at <i>p</i> = 1.0.
-Applied to the real datasets, the same tools find no compact shortcut. They do find that 16.7% of BreastMNIST test images have a near-identical copy in its training set,
+In models with two shortcuts, each alone triggers few false alarms while both together trigger most, and pairing the patch trigger with the additive or colour trigger tells which shortcut an image carries (AUROC up to 0.96–1.00, where the model's score gives 0.55). Two local markers in one model defeat the audit. Applied to the real datasets, the same tools find no compact shortcut. They do find that 16.7% of BreastMNIST test images have a near-identical copy in its training set,
 two of them with the opposite label. Code, all 300 models' results, and an in-browser demo are public.
 </div>
 
@@ -181,7 +181,7 @@ image is scored by its projection on <i>t</i> after subtracting its class mean, 
 Matching the trigger in pixel space is unreliable: it works for some artifacts and fails completely for others. The surprise is the <b>model-score baseline</b>. Simply ranking healthy
 images by how diseased the model thinks they are gives nearly the same result (0.86 / 0.76 / 0.96). Once a shortcut is strong, it is the main reason a healthy image scores high.
 The trigger direction adds only about 0.02 on skin and breast, and nothing on chest X-ray. We report this plainly, because a method that only beats a straw-man baseline would be easy to oversell.
-The direction should matter more when a model has several shortcuts or when disease signal dominates the score, but we have not tested that here.
+The direction matters more when a model has two shortcuts of similar strength (Section 7).
 At <i>p</i> = 1 the question is undefined (every healthy image is artifact-free).</p>
 
 <h2>6 · Repairing the model</h2>
@@ -229,10 +229,40 @@ border, best stopped after one or two rounds. Confirmed reweighting (6% false al
 the data simply does not say whether the disease or the artifact is the cause. The audit still detects these models best of all (a 1-pixel trigger flips the skin tag model).
 What it can tell the user in that case is that new data must be collected.</p>
 
-<h2>7 · Auditing the real datasets</h2>
+<h2>7 · Two shortcuts at once</h2>
+<p>Real models may pick up several shortcuts together, such as a hospital's tag and the same hospital's scanner colour. We trained 34 more models at <i>p</i> = 0.9 in which each training image
+received two artifacts, each drawn independently and each correlated with disease (tag + invisible pattern, ruler + tint, tag + ruler; four seeds, three on skin for the last two pairs because a
+run was stopped by low memory; <code>experiments/multi.py</code>). Table 3 shows the results.</p>
+<table>
+<caption><b>Table 3.</b> Models with two shortcuts (<i>p</i> = 0.9). False alarms: healthy test patients flagged when only A, only B, or both are added, against single-shortcut models.
+Attribution: AUROC for telling images that carry only A from images that carry only B, using the difference of the two triggers' feature directions, or the model's score (in its better orientation).</caption>
+<tr><th>Pair</th><th>Dataset</th><th class="n">A alone</th><th class="n">B alone</th><th class="n">both</th><th class="n">single models (A / B)</th><th class="n">attribution: triggers</th><th class="n">model score</th></tr>
+<tr><td rowspan="3">tag + invisible</td><td>Skin</td><td class="n">6%</td><td class="n">3%</td><td class="n">62%</td><td class="n">40% / 49%</td><td class="n"><b>0.97</b></td><td class="n">0.55</td></tr>
+<tr><td>Chest X-ray</td><td class="n">26%</td><td class="n">28%</td><td class="n">70%</td><td class="n">39% / 41%</td><td class="n"><b>0.96</b></td><td class="n">0.56</td></tr>
+<tr><td>Breast</td><td class="n">37%</td><td class="n">5%</td><td class="n">74%</td><td class="n">51% / 45%</td><td class="n">0.72</td><td class="n">0.79</td></tr>
+<tr><td rowspan="3">ruler + tint</td><td>Skin</td><td class="n">8%</td><td class="n">0%</td><td class="n">62%</td><td class="n">43% / 16%</td><td class="n">–</td><td class="n">0.77</td></tr>
+<tr><td>Chest X-ray</td><td class="n">29%</td><td class="n">30%</td><td class="n">70%</td><td class="n">42% / 43%</td><td class="n">0.72</td><td class="n">0.56</td></tr>
+<tr><td>Breast</td><td class="n">14%</td><td class="n">9%</td><td class="n">93%</td><td class="n">55% / 48%</td><td class="n"><b>1.00</b></td><td class="n">0.69</td></tr>
+<tr><td rowspan="3">tag + ruler</td><td>Skin</td><td class="n">8%</td><td class="n">10%</td><td class="n">58%</td><td class="n">41% / 43%</td><td class="n">0.39</td><td class="n">0.54</td></tr>
+<tr><td>Chest X-ray</td><td class="n">24%</td><td class="n">33%</td><td class="n">73%</td><td class="n">39% / 42%</td><td class="n">0.41</td><td class="n">0.58</td></tr>
+<tr><td>Breast</td><td class="n">10%</td><td class="n">11%</td><td class="n">99%</td><td class="n">51% / 55%</td><td class="n">0.49</td><td class="n">0.71</td></tr>
+</table>
+<p><b>The shortcuts combine.</b> With two correlated artifacts, the models mostly learn to respond to their <i>conjunction</i>. Adding either artifact alone flags 0–37% of healthy patients, less than in
+single-shortcut models (16–55%). Adding both flags 58–99%. New-hospital AUC is lower than for either single-shortcut model (skin 0.70–0.72 against 0.78–0.79; X-ray 0.91 against 0.94–0.95).
+A test that checks suspected confounders one at a time would therefore underestimate the harm, sometimes by a factor of ten.</p>
+<p><b>The trigger families find different shortcuts, and that is what makes attribution work.</b> When one shortcut is local and the other global, the patch trigger and the
+additive or colour trigger capture different shortcuts. The difference of their feature directions then tells which shortcut an image carries (AUROC 0.96–1.00 for tag + invisible on skin and X-ray
+and for ruler + tint on breast). The model's score cannot do this when the two shortcuts are about equally strong (0.55–0.56). This is the case anticipated in Section 5 where the trigger direction adds
+something the score lacks. The colour trigger still matches the planted tint when a second shortcut is present (cosine with the true colour shift 0.59–1.00 on X-ray and breast, against −0.74 to −1.00 for
+honest models' colour triggers). On skin the colour search found no flip at all, so attribution is undefined there.</p>
+<p><b>Two local markers defeat the audit.</b> For tag + ruler, the cheapest patch usually lands on one marker. A second search with that region forbidden ("peeling") often finds the
+same marker again, or spurious edits elsewhere: on breast, its mass on the ruler is 0.00–0.44. Attribution is then at or below chance. Finding several shortcuts of the same kind needs a search that
+returns several diverse triggers, which we leave open.</p>
+
+<h2>8 · Auditing the real datasets</h2>
 <p>We ran the audit on three clean models per real dataset (no planted artifact). The cheapest edits that push a healthy image to "disease" cost 12 px (skin), 17 px (X-ray) and
 208 px (breast), the same range as our honest synthetic models. The triggers look like small lesion-like or opacity-like edits rather than a recurring marker. <b>We find no evidence of a compact shortcut</b> in these
-64-pixel versions of the datasets, which is not the same as showing there is none (Section 9).</p>
+64-pixel versions of the datasets, which is not the same as showing there is none (Section 10).</p>
 <p>A side check found something else. Comparing every pair of images across splits by the correlation of 32×32 mean-centred thumbnails, we find that
 <b>26 of 156 BreastMNIST test images (16.7%)</b> have a near-identical copy (<i>r</i> > 0.99) in the training set, plus 18 of 78 validation images. In two of those pairs the copies
 have <i>opposite labels</i> (Figure 10). DermaMNIST has 20 such test images (1.0%); the classifiers get 19–20 of them right, against 85–86% accuracy on the rest. PneumoniaMNIST has none.
@@ -240,7 +270,7 @@ These may be repeated frames of the same lesion rather than literal copies, but 
 <figure><img src="figures/real.png" alt="Real dataset audit"><figcaption><b>Figure 10.</b> Top: BreastMNIST test images and their nearest training images; red labels
 mark pairs whose labels disagree. Bottom: triggers recovered from clean models on the real data (patch, additive), and the share of test images with a near-copy in train.</figcaption></figure>
 
-<h2>8 · Things that did not work</h2>
+<h2>9 · Things that did not work</h2>
 <p>We list the negative results because they are useful to anyone trying this:</p>
 <ul>
 <li><b>Sparse-autoencoder feature audit.</b> A TopK sparse autoencoder on the last feature map gives exact per-feature contributions to the logit. On shortcut models,
@@ -251,13 +281,13 @@ however, the artifact did not separate into its own feature: it was mixed with d
 <li><b>Augmentation during the trigger search</b> (expectation over transformations) did not make the triggers transfer better or detect better, and made each search several times slower.</li>
 </ul>
 
-<h2>9 · Limitations</h2>
-<p>The artifacts are synthetic and stamped cleanly. Real confounders vary more (several marker styles, partial occlusions, correlations with patient age) and may be learned as distributed features that no single
+<h2>10 · Limitations</h2>
+<p>The artifacts are synthetic and stamped cleanly. Real confounders vary more (several marker styles, partial occlusions, correlations with patient age, several shortcuts of the same kind, which our audit cannot separate) and may be learned as distributed features that no single
 universal edit captures, which is the case where we saw scrubbing fail. Images are 64×64 and the models are small; at clinical resolution, triggers will be harder to search for and to read.
 Most conditions have two seeds (four at <i>p</i> ∈ {0.5, 0.9, 1.0}), and the repair and grounding experiments use four at <i>p</i> = 0.9, so differences below about 0.02 AUC are noise. Adding the two extra seeds moved the detection AUROCs by at most 0.035. The detection threshold on cost has to be calibrated per task; we show that one shared threshold would fail for chest X-rays.
 Finally, the real-data audit uses MedMNIST's preprocessed images, which may already have removed the burned-in text and borders through which real shortcuts usually enter.</p>
 
-<h2>10 · Conclusion</h2>
+<h2>11 · Conclusion</h2>
 <div class="box">A medical classifier's validation score cannot tell you whether it learned the disease or the hospital. Asking the model for its cheapest way to flip a healthy
 patient to diseased can. On models with planted shortcuts, the answer reproduces the shortcut, including one invisible to people. It identifies most of the affected images,
 and when the shortcut is global it provides the material to unlearn it. It is not a proof of honesty: honest chest X-ray models are cheap to fool too, and only checking whether the trigger still works away from the anatomy tells the two apart. The output of an audit is a picture

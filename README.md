@@ -35,6 +35,8 @@ The name comes from *Clever Hans*, the horse that seemed to do arithmetic but wa
 | False alarms from the invisible pattern after scrubbing | 45% → **0%** |
 | Reweighting with human-confirmed groups, breast (oracle 0.88) | 0.70 → 0.83 |
 | Region swapping on rulers, false alarms after one round / three rounds | 47% → 14% / **3%** |
+| Two shortcuts in one model: healthy patients flagged by one artifact alone vs. both (skin, tag + invisible) | 6% vs. **62%** |
+| Telling which of two shortcuts an image carries (triggers vs. model score; skin and X-ray, tag + invisible) | **0.96–0.97** vs. 0.55–0.56 |
 | BreastMNIST test images with a near-identical copy in its training set | **16.7%** (2 with the opposite label) |
 
 ## Results to read carefully
@@ -45,6 +47,7 @@ These are reported plainly in the paper. They matter as much as the wins.
 - **Cheap-to-flip does not mean cheating.** Honest chest X-ray models are flipped by 20–30 pixels of lung opacity, as cheaply as shortcut models. The *context test* separates them: paste the trigger onto images from an unrelated dataset. A shortcut key still works there, while a disease imitation does not. It fails on breast ultrasound, where honest triggers are adversarial noise that works anywhere, so cost and context complement each other and neither works with one threshold for every dataset.
 - **The model's own score is a strong baseline.** For finding shortcut-carrying images, our trigger direction beats ranking by model score by only about 0.02 AUROC on skin and breast, and not at all on chest X-ray.
 - **Scrubbing works for global shortcuts (the invisible pattern, the tint) and not for local markers.** Automatically inferred groups are too noisy for reweighting. Human confirmation is the step that makes the repair work. Swapping the region the trigger points at fixes rulers at the image border, but for markers that overlap the anatomy (the ink ellipse) it removes disease signal and makes things worse.
+- **Shortcuts combine.** With two correlated artifacts, models mostly respond to both together, so testing one suspected confounder at a time can underestimate the harm tenfold. Two local markers in one model (tag + ruler) defeat the audit.
 - **Nothing fixes *p* = 1.** If every diseased training image has the marker and no healthy one does, the data cannot distinguish the two. The audit flags these models most clearly; the fix is new data.
 - **Approaches that failed:** a sparse-autoencoder feature audit (the artifact was mixed with disease features), contrast and bimodality statistics, projection with inferred groups, and augmentation during the trigger search (EOT).
 
@@ -72,6 +75,7 @@ On one laptop GPU the whole pipeline takes a few hours. Each script skips work i
 | `experiments/context.py` | the context test |
 | `experiments/ground.py` | finding shortcut-carrying images |
 | `experiments/fix.py`, `reweight.py`, `swap.py`, `swap_iter.py` | repairs |
+| `experiments/multi.py` | models with two shortcuts |
 | `experiments/saliency.py` | Grad-CAM baseline |
 | `experiments/real_audit.py` | duplicate check and audit of clean models on the real data |
 | `tests/` | fast CPU checks |

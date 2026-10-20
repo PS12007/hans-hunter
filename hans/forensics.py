@@ -30,20 +30,23 @@ def _success(logit, direction):
     return (direction * logit > 0).float().mean().item()
 
 
-def search_patch(model, x, direction=1, target=0.8, steps=300, lam0=1e-3, seed=0, eot=False):
-    """x: [N,3,64,64] audit images currently on the other side. Returns dict."""
+def search_patch(model, x, direction=1, target=0.8, steps=300, lam0=1e-3, seed=0, eot=False, forbid=None):
+    """x: [N,3,64,64] audit images currently on the other side. Returns dict.
+    forbid: optional [64,64] boolean array of pixels the patch may not use (for peeling off a
+    trigger that was already found)."""
     torch.manual_seed(seed)
     gen = torch.Generator(device=DEV).manual_seed(seed)
     model.eval()
     for p in model.parameters():
         p.requires_grad_(False)
     m_raw = torch.full((1, 1, 64, 64), -3.0, device=DEV, requires_grad=True)
+    allow = 1.0 if forbid is None else torch.tensor(~np.asarray(forbid, bool), dtype=torch.float32, device=DEV)[None, None]
     p_raw = (torch.randn(1, 3, 64, 64, device=DEV) * 0.1).requires_grad_(True)
     opt = torch.optim.Adam([m_raw, p_raw], lr=0.1)
     lam = lam0
     best = None
     for s in range(steps):
-        m = torch.sigmoid(m_raw)
+        m = torch.sigmoid(m_raw) * allow
         pat = torch.sigmoid(p_raw)
         xe = (1 - m) * x + m * pat
         if eot:

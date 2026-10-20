@@ -91,3 +91,15 @@ def test_audit_finds_a_cheap_trigger_for_a_planted_shortcut():
     assert (M.predict(model, M.to_tensor(tagged)) > 0).mean() > 0.8   # the tag alone flips them
     res = Fz.search_patch(model, M.to_tensor(clean), steps=150, seed=0)
     assert res["mask"] is not None and res["cost"] < 200             # pixels; the image has 4096
+
+
+def test_patch_search_respects_forbidden_region():
+    torch.manual_seed(0)
+    model = M.Net().to(M.DEV)
+    x = M.to_tensor(fake_images(8))
+    forbid = np.ones((64, 64), bool)
+    forbid[32:, 32:] = False                       # only the bottom-right quadrant is allowed
+    res = Fz.search_patch(model, x, steps=20, target=0.0, seed=0, forbid=forbid)
+    assert res["mask"] is not None
+    assert res["mask"][forbid].max() == 0
+    assert res["mask"][~forbid].max() > 0
