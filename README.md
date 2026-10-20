@@ -5,7 +5,7 @@
 Medical AI models often learn *shortcuts*: a hospital's corner marker, a ruler, a scanner's colour cast, anything that happens to accompany the disease in the training data. The model's test score rewards a shortcut rather than revealing it. Hans Hunter audits a trained model by asking it one question: *what is the cheapest single edit that makes healthy scans look diseased to you?* On an honest model, that edit has to look like disease. On a cheating model it is small, and it shows you the shortcut.
 
 - 📄 **Technical report:** [docs/hans-hunter.pdf](docs/hans-hunter.pdf) ([HTML](https://ps12007.github.io/hans-hunter/paper.html))
-- 🧪 **Interactive demo:** [ps12007.github.io/hans-hunter](https://ps12007.github.io/hans-hunter/). Two chest X-ray models run in your browser. Add the hospital marker and watch one of them panic, or apply the trigger the audit recovered.
+- 🧪 **Interactive demo:** [ps12007.github.io/hans-hunter](https://ps12007.github.io/hans-hunter/). Three chest X-ray models (honest, shortcut, repaired) run in your browser. Add the hospital marker and watch the shortcut model panic, apply the trigger the audit recovered, or put the marker on a breast ultrasound image and watch the shortcut model find pneumonia in it.
 
 The name comes from *Clever Hans*, the horse that seemed to do arithmetic but was reading its trainer's body language.
 
