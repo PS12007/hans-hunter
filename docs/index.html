@@ -89,7 +89,7 @@ footer { margin-top: 56px; font-size: 14px; color: var(--muted); border-top: 1px
 
 <section id="lab">
   <h2>Be the auditor</h2>
-  <p>Two networks were trained on the same paediatric chest X-rays. In the shortcut model's training data, a small "R" marker sat on 95% of pneumonia scans and only 5% of normal ones; for the honest model the marker meant nothing. Both score well on held-out scans. Pick a normal X-ray, then add the marker or draw your own and watch which model changes its mind. Both networks run in your browser.</p>
+  <p>Three networks were trained on the same paediatric chest X-rays. In the shortcut model's training data, a small "R" marker sat on 95% of pneumonia scans and only 5% of normal ones; for the honest model the marker meant nothing. The repaired model saw the shortcut model's data again, with marked and unmarked scans of each class weighted equally, as an auditor would do after confirming what the recovered trigger shows. All three score well on held-out scans. Pick a normal X-ray, then add the marker or draw your own and watch which model changes its mind. Then try the bottom row: images that are not X-rays at all. The repaired model is much better than the shortcut model but not perfect: it still reacts a little to the marker. All three networks run in your browser.</p>
   <div class="lab">
     <div>
       <div class="canvas-wrap"><canvas id="view" width="64" height="64" aria-label="Chest X-ray, draw to edit"></canvas></div>
@@ -107,8 +107,10 @@ footer { margin-top: 56px; font-size: 14px; color: var(--muted); border-top: 1px
         <div class="bar"><i id="bh" style="background:var(--honest)"></i></div><div class="verdict" id="dh"></div></div>
       <div class="meter"><div class="row"><span class="name">Shortcut model</span><span class="val" id="vs">–</span></div>
         <div class="bar"><i id="bs" style="background:var(--shortcut)"></i></div><div class="verdict" id="ds"></div></div>
+      <div class="meter"><div class="row"><span class="name">Repaired model</span><span class="val" id="vr">–</span></div>
+        <div class="bar"><i id="br" style="background:var(--accent)"></i></div><div class="verdict" id="dr"></div></div>
       <p class="small">Probability of pneumonia. The "recovered trigger" is the smallest patch our audit found that flips the shortcut model, computed without being told about the marker.</p>
-      <div class="small">Pick an X-ray (top two rows normal, bottom two pneumonia):</div>
+      <div class="small">Pick an image: rows 1–2 normal X-rays, rows 3–4 pneumonia, row 5 not X-rays at all (breast ultrasound). Add the marker to one and the shortcut model may see pneumonia in a breast: it does for <span id="ffr">about a third</span> of normal ultrasound images, against a few percent for the other two models. That is the context test from the paper. (The first four in the row are ones it flips.)</div>
       <div class="gallery" id="gallery"></div>
     </div>
   </div>
@@ -214,9 +216,10 @@ footer { margin-top: 56px; font-size: 14px; color: var(--muted); border-top: 1px
     const arr = new Float32Array(64 * 64 * 3);
     for (let i = 0; i < 64 * 64; i++) for (let c = 0; c < 3; c++) arr[3 * i + c] = img[4 * i + c] / 255;
     const x = tf.tensor4d(arr, [1, 64, 64, 3]);
-    const ph = sig(forward(models.honest, x)), ps = sig(forward(models.shortcut, x));
+    const ph = sig(forward(models.honest, x)), ps = sig(forward(models.shortcut, x)), pr = sig(forward(models.repaired, x));
     x.dispose();
-    show("h", ph); show("s", ps);
+    show("h", ph); show("s", ps); show("r", pr);
+    document.body.dataset.pr = pr.toFixed(4);
     document.body.dataset.ph = ph.toFixed(4); document.body.dataset.ps = ps.toFixed(4);
     busy = false;
     if (pending) { pending = false; predict(); }
@@ -226,8 +229,8 @@ footer { margin-top: 56px; font-size: 14px; color: var(--muted); border-top: 1px
     current = i;
     ctx.drawImage(sprite, (i % 8) * 64, Math.floor(i / 8) * 64, 64, 64, 0, 0, 64, 64);
     document.querySelectorAll(".gallery canvas").forEach((c, k) => c.classList.toggle("sel", k === i));
-    const lab = manifest.images[i].label;
-    $("truth").textContent = "Radiologist's label: " + (lab ? "pneumonia" : "normal");
+    const m = manifest.images[i];
+    $("truth").textContent = m.label < 0 ? `Not a chest X-ray: a ${m.source} image` : "Radiologist's label: " + (m.label ? "pneumonia" : "normal");
     predict();
   }
 
@@ -262,19 +265,22 @@ footer { margin-top: 56px; font-size: 14px; color: var(--muted); border-top: 1px
   async function init() {
     stats();
     manifest = await (await fetch("demo/manifest.json")).json();
+    if (manifest.foreign_flip_rate != null) $("ffr").textContent = Math.round(100 * manifest.foreign_flip_rate) + "%";
     sprite = new Image(); sprite.src = "demo/xrays.png"; await sprite.decode();
     trigger = new Image(); trigger.src = "demo/trigger.png"; await trigger.decode();
     const g = $("gallery");
     manifest.images.forEach((m, i) => {
       const c = document.createElement("canvas"); c.width = c.height = 64;
       c.getContext("2d").drawImage(sprite, (i % 8) * 64, Math.floor(i / 8) * 64, 64, 64, 0, 0, 64, 64);
-      c.title = m.label ? "Pneumonia" : "Normal"; c.onclick = () => load(i); g.appendChild(c);
+      c.title = m.label < 0 ? m.source : m.label ? "Pneumonia" : "Normal"; c.onclick = () => load(i); g.appendChild(c);
     });
     load(0);
     try {
-      [models.honest, models.shortcut] = await Promise.all([loadModel("honest"), loadModel("shortcut")]);
+      [models.honest, models.shortcut, models.repaired] = await Promise.all(["honest", "shortcut", "repaired"].map(loadModel));
       $("status").textContent = "Draw on the X-ray, or use the buttons.";
-      if (location.search.includes("demo=tag")) $("tag").click(); else predict();
+      const q = new URLSearchParams(location.search);
+      if (q.has("img")) load(+q.get("img"));
+      if (q.get("demo") === "tag") $("tag").click(); else predict();
     } catch (e) { $("status").textContent = "Could not load the models: " + e.message; }
   }
   init();

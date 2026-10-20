@@ -1,12 +1,13 @@
 """Export models, images and a recovered trigger for the in-browser demo (docs/).
 
-Two chest X-ray models trained on identical images: an honest one (the corner
-tag is unrelated to the label, p = 0.5) and a shortcut one (the tag accompanies
-pneumonia 95% of the time). BatchNorm is folded into the convolutions and the
+Three chest X-ray models: an honest one (the corner tag is unrelated to the
+label, p = 0.5), a shortcut one (the tag accompanies pneumonia 95% of the time)
+and a repaired one (the shortcut model's training data, retrained with the four
+(class x tag) groups weighted equally, as after an auditor confirms the tag). BatchNorm is folded into the convolutions and the
 weights are stored as float16. Also writes 32 test X-rays and the patch trigger
 the audit recovers from the shortcut model.
 
-Output: docs/demo/{honest,shortcut}.bin, docs/demo/manifest.json, docs/demo/xrays.png,
+Output: docs/demo/{honest,shortcut,repaired}.bin, docs/demo/manifest.json, docs/demo/xrays.png,
 docs/demo/trigger.png
 """
 import json, os, sys
@@ -15,9 +16,29 @@ import torch
 from PIL import Image
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from hans import data as D, model as M, forensics as Fz
+from experiments.phase import EPOCHS, evaluate
+from experiments.reweight import balanced_weights
 
 OUT = "docs/demo"
-MODELS = {"honest": "runs/phase/pneumonia_tag_p0.5_s0.pt", "shortcut": "runs/phase/pneumonia_tag_p0.95_s0.pt"}
+MODELS = {"honest": "runs/phase/pneumonia_tag_p0.5_s0.pt", "shortcut": "runs/phase/pneumonia_tag_p0.95_s0.pt",
+          "repaired": "runs/demo/repaired.pt"}
+
+
+def train_repaired(ds):
+    """Group-balanced retraining of the p = 0.95 tag model's data (same draws as experiments/phase.py)."""
+    path = MODELS["repaired"]
+    if os.path.exists(path):
+        return
+    xtr, ytr, _ = ds["train"]
+    a = D.assign(ytr, 0.95, np.random.default_rng(0))
+    xa, _ = D.apply(xtr, a, "tag", seed=0)
+    m = M.train(M.to_tensor(xa), ytr, epochs=EPOCHS["pneumonia"], seed=0, weights=balanced_weights(ytr, a))
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    torch.save(m.state_dict(), path)
+    for name, mp in MODELS.items():
+        mm = M.Net().to(M.DEV); mm.load_state_dict(torch.load(mp)); mm.eval()
+        r = evaluate(mm, ds, "tag", 0.95, 0)
+        print(name, {k: round(r[k], 3) for k in ("auc_source", "auc_indep", "auc_flip", "effect_neg_flip")})
 
 
 def fold(conv, bn):
@@ -55,6 +76,7 @@ def main():
     os.makedirs(OUT, exist_ok=True)
     ds = D.load("pneumonia")
     xte, yte, _ = ds["test"]
+    train_repaired(ds)
     manifest = {"models": {}}
     for name, path in MODELS.items():
         m = M.Net()
@@ -81,12 +103,30 @@ def main():
         if c == 0:  # show the normal scans the marker flips most first
             ok = ok[np.argsort(-st[ok])]
         pick += list(ok)
-    sprite = np.zeros((64 * 4, 64 * 8), np.uint8)
+    sprite = np.zeros((64 * 5, 64 * 8, 3), np.uint8)
     for k, i in enumerate(pick):
         r, c = divmod(k, 8)
-        sprite[r * 64:(r + 1) * 64, c * 64:(c + 1) * 64] = (xte[i, :, :, 0] * 255).round().astype(np.uint8)
-    Image.fromarray(sprite).save(f"{OUT}/xrays.png", optimize=True)
+        sprite[r * 64:(r + 1) * 64, c * 64:(c + 1) * 64] = (xte[i] * 255).round().astype(np.uint8)
     manifest["images"] = [dict(label=int(yte[i]), honest=float(sh[i]), shortcut=float(ss[i])) for i in pick]
+    # bottom row: breast ultrasound images (not chest X-rays) that all three models call normal;
+    # ordered so the ones the marker flips for the shortcut model come first. (Skin photos are
+    # useless here: every X-ray model calls them pneumonia outright.)
+    xo, yo, _ = D.load("breast")["test"]
+    xo = xo[yo == 0]
+    xo_t, _ = D.apply(xo, np.ones(len(xo), int), "tag", seed=0)
+    rep = M.Net(); rep.load_state_dict(torch.load(MODELS["repaired"], map_location="cpu")); rep.eval()
+    with torch.no_grad():
+        to = lambda a: torch.from_numpy(a).permute(0, 3, 1, 2)
+        base = np.stack([torch.sigmoid(m(to(xo))).numpy() for m in (honest, short, rep)])
+        tagged_s = torch.sigmoid(short(to(xo_t))).numpy()
+    ok = np.flatnonzero((base < 0.5).all(0))
+    manifest["foreign_flip_rate"] = float(np.mean(tagged_s[ok] > 0.5))
+    ok = ok[np.argsort(-tagged_s[ok])]
+    sel = list(ok[:4]) + list(rng.choice(ok[4:], 4, replace=False))
+    for k, i in enumerate(sel):
+        sprite[256:320, k * 64:(k + 1) * 64] = (xo[i] * 255).round().astype(np.uint8)
+        manifest["images"].append(dict(label=-1, source="breast ultrasound"))
+    Image.fromarray(sprite).save(f"{OUT}/xrays.png", optimize=True)
     # the audit's recovered trigger for the shortcut model
     xa = M.to_tensor(np.concatenate([ds["val"][0], ds["test"][0]])[np.concatenate([ds["val"][1], ds["test"][1]]) == 0][:64])
     sm = M.Net().to(M.DEV); sm.load_state_dict(torch.load(MODELS["shortcut"])); sm.eval()
