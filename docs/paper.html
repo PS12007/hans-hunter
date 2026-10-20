@@ -230,9 +230,8 @@ the data simply does not say whether the disease or the artifact is the cause. T
 What it can tell the user in that case is that new data must be collected.</p>
 
 <h2>7 · Two shortcuts at once</h2>
-<p>Real models may pick up several shortcuts together, such as a hospital's tag and the same hospital's scanner colour. We trained 34 more models at <i>p</i> = 0.9 in which each training image
-received two artifacts, each drawn independently and each correlated with disease (tag + invisible pattern, ruler + tint, tag + ruler; four seeds, three on skin for the last two pairs because a
-run was stopped by low memory; <code>experiments/multi.py</code>). Table 3 shows the results.</p>
+<p>Real models may pick up several shortcuts together, such as a hospital's tag and the same hospital's scanner colour. We trained 36 more models at <i>p</i> = 0.9 in which each training image
+received two artifacts, each drawn independently and each correlated with disease (tag + invisible pattern, ruler + tint, tag + ruler; four seeds; <code>experiments/multi.py</code>). Table 3 shows the results.</p>
 <table>
 <caption><b>Table 3.</b> Models with two shortcuts (<i>p</i> = 0.9). False alarms: healthy test patients flagged when only A, only B, or both are added, against single-shortcut models.
 Attribution: AUROC for telling images that carry only A from images that carry only B, using the difference of the two triggers' feature directions, or the model's score (in its better orientation).</caption>
@@ -240,15 +239,15 @@ Attribution: AUROC for telling images that carry only A from images that carry o
 <tr><td rowspan="3">tag + invisible</td><td>Skin</td><td class="n">6%</td><td class="n">3%</td><td class="n">62%</td><td class="n">40% / 49%</td><td class="n"><b>0.97</b></td><td class="n">0.55</td></tr>
 <tr><td>Chest X-ray</td><td class="n">26%</td><td class="n">28%</td><td class="n">70%</td><td class="n">39% / 41%</td><td class="n"><b>0.96</b></td><td class="n">0.56</td></tr>
 <tr><td>Breast</td><td class="n">37%</td><td class="n">5%</td><td class="n">74%</td><td class="n">51% / 45%</td><td class="n">0.72</td><td class="n">0.79</td></tr>
-<tr><td rowspan="3">ruler + tint</td><td>Skin</td><td class="n">8%</td><td class="n">0%</td><td class="n">62%</td><td class="n">43% / 16%</td><td class="n">–</td><td class="n">0.77</td></tr>
+<tr><td rowspan="3">ruler + tint</td><td>Skin</td><td class="n">8%</td><td class="n">0%</td><td class="n">62%</td><td class="n">43% / 16%</td><td class="n">–</td><td class="n">0.75</td></tr>
 <tr><td>Chest X-ray</td><td class="n">29%</td><td class="n">30%</td><td class="n">70%</td><td class="n">42% / 43%</td><td class="n">0.72</td><td class="n">0.56</td></tr>
 <tr><td>Breast</td><td class="n">14%</td><td class="n">9%</td><td class="n">93%</td><td class="n">55% / 48%</td><td class="n"><b>1.00</b></td><td class="n">0.69</td></tr>
-<tr><td rowspan="3">tag + ruler</td><td>Skin</td><td class="n">8%</td><td class="n">10%</td><td class="n">58%</td><td class="n">41% / 43%</td><td class="n">0.39</td><td class="n">0.54</td></tr>
+<tr><td rowspan="3">tag + ruler</td><td>Skin</td><td class="n">8%</td><td class="n">9%</td><td class="n">58%</td><td class="n">40% / 43%</td><td class="n">0.34</td><td class="n">0.55</td></tr>
 <tr><td>Chest X-ray</td><td class="n">24%</td><td class="n">33%</td><td class="n">73%</td><td class="n">39% / 42%</td><td class="n">0.41</td><td class="n">0.58</td></tr>
 <tr><td>Breast</td><td class="n">10%</td><td class="n">11%</td><td class="n">99%</td><td class="n">51% / 55%</td><td class="n">0.49</td><td class="n">0.71</td></tr>
 </table>
 <p><b>The shortcuts combine.</b> With two correlated artifacts, the models mostly learn to respond to their <i>conjunction</i>. Adding either artifact alone flags 0–37% of healthy patients, less than in
-single-shortcut models (16–55%). Adding both flags 58–99%. New-hospital AUC is lower than for either single-shortcut model (skin 0.70–0.72 against 0.78–0.79; X-ray 0.91 against 0.94–0.95).
+single-shortcut models (16–55%). Adding both flags 58–99%. New-hospital AUC is lower than for either single-shortcut model (skin 0.70–0.72 against 0.76–0.80; X-ray 0.91 against 0.94–0.95).
 A test that checks suspected confounders one at a time would therefore underestimate the harm, sometimes by a factor of ten.</p>
 <p><b>The trigger families find different shortcuts, and that is what makes attribution work.</b> When one shortcut is local and the other global, the patch trigger and the
 additive or colour trigger capture different shortcuts. The difference of their feature directions then tells which shortcut an image carries (AUROC 0.96–1.00 for tag + invisible on skin and X-ray
